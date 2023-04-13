@@ -19,19 +19,24 @@ if ((! identical(rownames(pseudo), rownames(Ne_related))) || (! identical(rownam
 pangenome <- cbind(pangenome, Ne_related)
 pangenome <- cbind(pangenome, pseudo)
 
+pangenome$mean_percent_singletons_per9 <- (pangenome$mean_num_singletons_per9 / pangenome$mean_num_genes) * 100
+pangenome$mean_percent_singletons_pseudo_per9 <- (pangenome$mean_num_singletons_pseudo_per9 / pangenome$mean_num_pseudo) * 100
+pangenome$si_sp <- pangenome$mean_percent_singletons_per9 / pangenome$mean_percent_singletons_pseudo_per9
+
 sp_taxonomy <- read.table('/data1/gdouglas/projects/accessory_vs_pseudogene/mapfiles/focal_and_non.focal_taxonomy.tsv',
                           row.names = 1, stringsAsFactors = FALSE, sep = '\t', header = TRUE)
 pangenome$class <- sp_taxonomy[rownames(pangenome), "class"]
 
 
 # Write out this table for sharing on FigShare:
-#write.table(x = pangenome,
-#            file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics.tsv",
-#            col.names = NA, row.names = TRUE, quote = FALSE, sep = "\t")
+write.table(x = pangenome,
+           file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics.tsv",
+           col.names = NA, row.names = TRUE, quote = FALSE, sep = "\t")
+
 # And taxonomy table:
-#write.table(x = sp_taxonomy[rownames(pangenome), ],
-#            file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/taxonomy.tsv",
-#            col.names = NA, row.names = TRUE, quote = FALSE, sep = "\t")
+write.table(x = sp_taxonomy[rownames(pangenome), ],
+           file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/taxonomy.tsv",
+           col.names = NA, row.names = TRUE, quote = FALSE, sep = "\t")
 
 # Decided to filter out two species with < 9 genomes (Micromonospora_arenicola and Micromonospora_oceanensis).
 # These genomes must have been removed/changed for some reason in between the GTDB release and when I downloaded them.
