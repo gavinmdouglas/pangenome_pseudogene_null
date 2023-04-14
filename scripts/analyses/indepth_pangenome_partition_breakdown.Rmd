@@ -1,0 +1,495 @@
+---
+title: "Breakdown of pangenome partition by species and COG category"
+author: "Gavin Douglas"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    code_folding: hide
+    theme: cerulean
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(ComplexHeatmap))
+suppressPackageStartupMessages(library(circlize))
+suppressPackageStartupMessages(library(gridtext))
+```
+
+# Preprocess
+
+## Read in COG annot information
+```{r read_in}
+intact_annot <- readRDS("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/intact_and_both_cluster_annot.rds")
+intact_annot <- intact_annot[-which(intact_annot$COG_category == "-"), ]
+intact_annot <- intact_annot[-which(intact_annot$COG_category == ""), ]
+
+# For intact clusters, filter out clusters outside size range (at least based on what clusters they're in).
+cluster_filt_lengths <- read.table(file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_filt_lengths_and_additional.tsv.gz",
+                                   header = TRUE, sep = "\t", row.names = 1)
+
+intact_annot <- intact_annot[which(rownames(intact_annot) %in% rownames(cluster_filt_lengths)), ]
+
+pseudo_annot <- readRDS("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/intergenic_pseudo_cluster_COG_annot.rds")
+pseudo_annot <- pseudo_annot$pseudo
+pseudo_annot <- pseudo_annot[-which(pseudo_annot$majority_COG_category == ""), ]
+
+rownames(pseudo_annot) <- pseudo_annot$cluster
+pseudo_annot <- pseudo_annot[, c(2, 3)]
+colnames(pseudo_annot) <- c("COG", "COG_category")
+
+intact_annot <- intact_annot[, c("all_COG", "COG_category")]
+colnames(intact_annot) <- c("COG", "COG_category")
+
+COG_category_annot <- rbind(intact_annot, pseudo_annot)
+
+cluster_pangenome_categories <- readRDS("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_pangenome_categories.rds")
+
+# Read in COG category db info.
+COG_category_descrip <- read.table("/data1/gdouglas/db/COG_definitions/COG_category_descrip.tsv",
+                                   header = FALSE, sep="\t", stringsAsFactors = FALSE, row.names = 1)
+
+# Ignore several COG categories (eukaryote-associated primarily)
+COG_category_descrip <- COG_category_descrip[which(! rownames(COG_category_descrip) %in% c("A", "B", "Y", "Z")), , drop = FALSE]
+
+```
+
+# Heatmap-prep function
+
+```{r prep_function}
+prep_heatmap_input <- function(clusters_to_include) {
+
+  # Subset to specific clusters only.
+  cluster_pangenome_categories_subset <- cluster_pangenome_categories
+  for (sp in names(cluster_pangenome_categories_subset)) {
+
+   for (type in names(cluster_pangenome_categories_subset[[sp]])) {
+    
+      for (partition in names(cluster_pangenome_categories_subset[[sp]][[type]])) {
+       
+        cluster_pangenome_categories_subset[[sp]][[type]][[partition]] <- intersect(cluster_pangenome_categories_subset[[sp]][[type]][[partition]],
+                                                                                    clusters_to_include)
+         
+      }
+     
+     }
+
+  }
+  
+  all_species <- names(cluster_pangenome_categories_subset)
+  
+  pangenome_category_breakdown <- data.frame(matrix(NA, nrow = length(all_species), ncol = 12))
+  rownames(pangenome_category_breakdown) <- all_species
+  colnames(pangenome_category_breakdown) <- c("intact_ultra.cloud", "intact_other.cloud", "intact_shell", "intact_soft.core",
+                                              "both_ultra.cloud", "both_other.cloud", "both_shell", "both_soft.core",
+                                              "pseudo_ultra.cloud", "pseudo_other.cloud", "pseudo_shell", "pseudo_soft.core")
+  
+  for (sp in all_species) {
+    
+    for (type in c("intact", "both", "pseudo")) {
+      
+      for (partition in c("ultra.cloud", "other.cloud", "shell", "soft.core")) {
+          column_name <- paste(type, partition, sep = "_")
+          pangenome_category_breakdown[sp, column_name] <- length(cluster_pangenome_categories_subset[[sp]][[type]][[partition]])
+      }
+
+    }
+
+  }
+
+  pangenome_category_breakdown_rel.by.category <- pangenome_category_breakdown
+  pangenome_category_breakdown_rel.by.pangenome <- pangenome_category_breakdown
+  
+  pseudo_colnames <- paste("pseudo", c("ultra.cloud", "other.cloud", "shell", "soft.core"), sep = "_")
+  intact_colnames <- paste("intact", c("ultra.cloud", "other.cloud", "shell", "soft.core"), sep = "_")
+  mixed_colnames <- paste("both", c("ultra.cloud", "other.cloud", "shell", "soft.core"), sep = "_")
+  
+  ultra.cloud_colnames <- paste(c("intact", "both", "pseudo"), "ultra.cloud", sep = "_")
+  other.cloud_colnames <- paste(c("intact", "both", "pseudo"), "other.cloud", sep = "_")
+  shell_colnames <- paste(c("intact", "both", "pseudo"), "shell", sep = "_")
+  soft.core_colnames <- paste(c("intact", "both", "pseudo"), "soft.core", sep = "_")
+  
+  for (sp in all_species) {
+    
+    sp_total_pseudo <- sum(pangenome_category_breakdown[sp, pseudo_colnames])
+    sp_total_intact <- sum(pangenome_category_breakdown[sp, intact_colnames])
+    sp_total_mixed <- sum(pangenome_category_breakdown[sp, mixed_colnames])
+    
+    sp_total_ultra.cloud <- sum(pangenome_category_breakdown[sp, ultra.cloud_colnames])
+    sp_total_other.cloud <- sum(pangenome_category_breakdown[sp, other.cloud_colnames])
+    sp_total_shell <- sum(pangenome_category_breakdown[sp, shell_colnames])
+    sp_total_soft.core <- sum(pangenome_category_breakdown[sp, soft.core_colnames])
+
+    pangenome_category_breakdown_rel.by.category[sp, pseudo_colnames] <- (pangenome_category_breakdown_rel.by.category[sp, pseudo_colnames] / sp_total_pseudo) * 100
+    pangenome_category_breakdown_rel.by.category[sp, intact_colnames] <- (pangenome_category_breakdown_rel.by.category[sp, intact_colnames] / sp_total_intact) * 100
+    pangenome_category_breakdown_rel.by.category[sp, mixed_colnames] <- (pangenome_category_breakdown_rel.by.category[sp, mixed_colnames] / sp_total_mixed) * 100
+  
+    pangenome_category_breakdown_rel.by.pangenome[sp, ultra.cloud_colnames] <- (pangenome_category_breakdown_rel.by.pangenome[sp, ultra.cloud_colnames] / sp_total_ultra.cloud) * 100
+    pangenome_category_breakdown_rel.by.pangenome[sp, other.cloud_colnames] <- (pangenome_category_breakdown_rel.by.pangenome[sp, other.cloud_colnames] / sp_total_other.cloud) * 100
+    pangenome_category_breakdown_rel.by.pangenome[sp, shell_colnames] <- (pangenome_category_breakdown_rel.by.pangenome[sp, shell_colnames] / sp_total_shell) * 100
+    pangenome_category_breakdown_rel.by.pangenome[sp, soft.core_colnames] <- (pangenome_category_breakdown_rel.by.pangenome[sp, soft.core_colnames] / sp_total_soft.core) * 100
+    
+  }
+  
+  pangenome_category_breakdown_rel.by.category <- round(pangenome_category_breakdown_rel.by.category, 1)
+  pangenome_category_breakdown_rel.by.pangenome <- round(pangenome_category_breakdown_rel.by.pangenome, 1)
+  pangenome_category_breakdown_rel.by.pangenome <- pangenome_category_breakdown_rel.by.pangenome[, c(ultra.cloud_colnames, other.cloud_colnames, shell_colnames, soft.core_colnames)]
+  
+  pangenome_category_breakdown_by.category <- pangenome_category_breakdown[, colnames(pangenome_category_breakdown_rel.by.category)]
+  pangenome_category_breakdown_by.pangenome <- pangenome_category_breakdown[, colnames(pangenome_category_breakdown_rel.by.pangenome)]
+  
+  # Get text to show in heatmaps
+  pangenome_category_breakdown_rel.by.category_char <- apply(pangenome_category_breakdown_rel.by.category, 2, function(x) { paste(x, "%\n", sep = "") })
+  pangenome_category_breakdown_by.category_char <- apply(pangenome_category_breakdown_by.category, 2, function(x) { paste("(", x, ")", sep = "") })
+  
+  for (i in 1:ncol(pangenome_category_breakdown_rel.by.category_char)) {
+    pangenome_category_breakdown_rel.by.category_char[, i] <- paste(pangenome_category_breakdown_rel.by.category_char[, i],
+                                                                    pangenome_category_breakdown_by.category_char[, i], sep = "")
+  }
+  
+  pangenome_category_breakdown_rel.by.pangenome_char <- apply(pangenome_category_breakdown_rel.by.pangenome, 2, function(x) { paste(x, "%\n", sep = "") })
+  pangenome_category_breakdown_by.pangenome_char <- apply(pangenome_category_breakdown_by.pangenome, 2, function(x) { paste("(", x, ")", sep = "") })
+  
+  for (i in 1:ncol(pangenome_category_breakdown_rel.by.pangenome_char)) {
+    pangenome_category_breakdown_rel.by.pangenome_char[, i] <- paste(pangenome_category_breakdown_rel.by.pangenome_char[, i],
+                                                                    pangenome_category_breakdown_by.pangenome_char[, i], sep = "")
+  }
+  
+  return(list(by_category = pangenome_category_breakdown_rel.by.category,
+              by_category_fill = pangenome_category_breakdown_rel.by.category_char,
+              by_pangenome = pangenome_category_breakdown_rel.by.pangenome,
+              by_pangenome_fill = pangenome_category_breakdown_rel.by.pangenome_char))
+
+}
+```
+
+# Analysis
+
+## Overall breakdown heatmaps {.tabset}
+
+```{r overall_prep_tables}
+all_clusters <- as.character()
+
+for (sp in names(cluster_pangenome_categories)) {
+
+   for (type in names(cluster_pangenome_categories[[sp]])) {
+    
+      for (partition in names(cluster_pangenome_categories[[sp]][[type]])) {
+       
+        all_clusters <- c(all_clusters,
+                          cluster_pangenome_categories[[sp]][[type]][[partition]])
+         
+      }
+     
+    }
+
+}
+
+all_clusters <- unique(all_clusters)
+
+overall_prepped_files <- prep_heatmap_input(all_clusters)
+
+# Save tables as files for future reference.
+write.table(x = overall_prepped_files$by_category,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/all.clusters_percent_by_type.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+by_category_fill_to_write <- gsub("\n", " ", overall_prepped_files$by_category_fill)
+rownames(by_category_fill_to_write) <- rownames(overall_prepped_files$by_category)
+write.table(x = by_category_fill_to_write,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/all.clusters_percent_by_type_fill.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+write.table(x = overall_prepped_files$by_pangenome,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/all.clusters_percent_by_partition.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+by_pangenome_fill_to_write <- gsub("\n", " ", overall_prepped_files$by_pangenome_fill)
+rownames(by_pangenome_fill_to_write) <- rownames(overall_prepped_files$by_pangenome)
+write.table(x = by_pangenome_fill_to_write,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/all.clusters_percent_by_partition_fill.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+```
+
+
+### By cluster type (intact, mixed, or pseudogene)
+
+```{r overall_heatmap_by_intact_all, fig.width = 10, fig.height = 6}
+draw(column_title = "Cluster breakdown by cluster type, for all clusters (including those lacking COG category annotation)",
+     Heatmap(matrix = as.matrix(overall_prepped_files$by_category),
+             name = "Percent",
+             row_names_side = "left",
+             row_labels = gt_render(paste("*", gsub("_", " ", rownames(overall_prepped_files$by_category)), "*", sep = "")),
+             column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+             column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
+             cluster_rows = FALSE,
+             column_gap = unit(5, "mm"),
+             cluster_columns = FALSE,
+             column_names_rot = 45,
+             col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+             cell_fun = function(j, i, x, y, width, height, fill) {
+               grid.text(overall_prepped_files$by_category_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+             }))
+```
+
+
+### By pseudogene partition
+
+```{r overall_heatmap_by_partition_all, fig.width = 10, fig.height = 6}
+draw(column_title = "Cluster breakdown by pangenome partition, for all clusters (including unannotated)",
+     Heatmap(matrix = as.matrix(overall_prepped_files$by_pangenome),
+            name = "Percent",
+            column_labels = c("Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene"),
+            row_names_side = "left",
+            row_labels = gt_render(paste("*", gsub("_", " ", rownames(overall_prepped_files$by_pangenome)), "*", sep = "")),
+            column_split = c("a) Ultra-cloud", "a) Ultra-cloud", "a) Ultra-cloud", "b) Other-cloud", "b) Other-cloud", "b) Other-cloud", "c) Shell", "c) Shell", "c) Shell", "d) Soft-core", "d) Soft-core", "d) Soft-core"),
+            cluster_rows = FALSE,
+            column_gap = unit(5, "mm"),
+            cluster_columns = FALSE,
+            column_names_rot = 45,
+            col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+            cell_fun = function(j, i, x, y, width, height, fill) {
+              grid.text(overall_prepped_files$by_pangenome_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+            })
+)
+```
+
+
+## Many pseudogenes have no COG annotation (especially those in soft-core partition)
+
+```{r unannot_heatmap, fig.width = 10, fig.height = 6}
+unannot_clusters <- all_clusters[which(! all_clusters %in% rownames(COG_category_annot))]
+
+all_species <- names(cluster_pangenome_categories)
+  
+pangenome_category_breakdown_unannot <- data.frame(matrix(NA, nrow = length(all_species), ncol = 12))
+rownames(pangenome_category_breakdown_unannot) <- all_species
+colnames(pangenome_category_breakdown_unannot) <- c("intact_ultra.cloud", "intact_other.cloud", "intact_shell", "intact_soft.core",
+                                                    "both_ultra.cloud", "both_other.cloud", "both_shell", "both_soft.core",
+                                                    "pseudo_ultra.cloud", "pseudo_other.cloud", "pseudo_shell", "pseudo_soft.core")
+
+pangenome_category_breakdown_unannot_percent <- pangenome_category_breakdown_unannot
+
+for (sp in all_species) {
+  
+  for (type in c("intact", "both", "pseudo")) {
+    
+    for (partition in c("ultra.cloud", "other.cloud", "shell", "soft.core")) {
+      column_name <- paste(type, partition, sep = "_")
+      pangenome_category_breakdown_unannot[sp, column_name] <- length(which(cluster_pangenome_categories[[sp]][[type]][[partition]] %in% unannot_clusters))
+      pangenome_category_breakdown_unannot_percent[sp, column_name] <- (pangenome_category_breakdown_unannot[sp, column_name] /
+                                                                        length(cluster_pangenome_categories[[sp]][[type]][[partition]])) * 100
+    }
+    
+  }
+  
+}
+
+pangenome_category_breakdown_unannot_percent_char <- apply(pangenome_category_breakdown_unannot_percent, 2, function(x) { sprintf('%.1f', x) })
+pangenome_category_breakdown_unannot_char <- apply(pangenome_category_breakdown_unannot, 2, as.character)
+pangenome_category_breakdown_unannot_heatmap_fill <- pangenome_category_breakdown_unannot_percent_char
+for (i in 1:nrow(pangenome_category_breakdown_unannot_heatmap_fill)) {
+  for(j in 1:ncol(pangenome_category_breakdown_unannot_heatmap_fill)) {
+    pangenome_category_breakdown_unannot_heatmap_fill[i, j] <- paste(pangenome_category_breakdown_unannot_percent_char[i, j],
+                                                                     "%\n(",
+                                                                     pangenome_category_breakdown_unannot_char[i, j],
+                                                                     ")",
+                                                                     sep = "")
+  }
+}
+
+draw(column_title = "Percent of clusters without COG annotation (out of total for that cluster type, species, and pangenome partition)",
+     Heatmap(matrix = as.matrix(pangenome_category_breakdown_unannot_percent),
+        name = "Percent",
+        row_names_side = "left",
+        row_labels = gt_render(paste("*", gsub("_", " ", rownames(pangenome_category_breakdown_unannot_percent)), "*", sep = "")),
+        column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+        column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
+        cluster_rows = FALSE,
+        cluster_columns = FALSE,
+        column_names_rot = 45,
+        column_gap = unit(5, "mm"),
+        col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(pangenome_category_breakdown_unannot_heatmap_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+        })
+)
+
+
+# Save these tables too:
+write.table(x = pangenome_category_breakdown_unannot_percent,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/unannot_percent_by_table.cell.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+pangenome_category_breakdown_unannot_heatmap_fill_to_write <- gsub("\n", " ", pangenome_category_breakdown_unannot_heatmap_fill)
+rownames(pangenome_category_breakdown_unannot_heatmap_fill_to_write) <- rownames(pangenome_category_breakdown_unannot_percent)
+write.table(x = pangenome_category_breakdown_unannot_heatmap_fill_to_write,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/unannot_percent_by_table.cell_fill.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+```
+
+
+## Clusters annotated with COG category {.tabset}
+
+```{r annot_prep_tables}
+annot_prepped_files <- prep_heatmap_input(rownames(COG_category_annot))
+
+# Save tables as files for future reference.
+write.table(x = annot_prepped_files$by_category,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/cog.category.annot_percent_by_type.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+annot.only_by_category_fill_to_write <- gsub("\n", " ", annot_prepped_files$by_category_fill)
+rownames(annot.only_by_category_fill_to_write) <- rownames(annot_prepped_files$by_category)
+write.table(x = annot.only_by_category_fill_to_write,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/cog.category.annot_percent_by_type_fill.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+write.table(x = annot_prepped_files$by_pangenome,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/cog.category.annot_percent_by_partition.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+annot.only_by_pangenome_fill_to_write <- gsub("\n", " ", annot_prepped_files$by_pangenome_fill)
+rownames(annot.only_by_pangenome_fill_to_write) <- rownames(annot_prepped_files$by_pangenome)
+write.table(x = annot.only_by_pangenome_fill_to_write,
+            file = "/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/cog.category.annot_percent_by_partition_fill.tsv",
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+```
+
+### By cluster type (intact, mixed, or pseudogene)
+
+```{r overall_heatmap_by_intact, fig.width = 10, fig.height = 6}
+draw(column_title = "Cluster breakdown by cluster type, for COG-category annotated clusters",
+     Heatmap(matrix = as.matrix(annot_prepped_files$by_category),
+             name = "Percent",
+             row_names_side = "left",
+             row_labels = gt_render(paste("*", gsub("_", " ", rownames(annot_prepped_files$by_category)), "*", sep = "")),
+             column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+             column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
+             cluster_rows = FALSE,
+             column_gap = unit(5, "mm"),
+             cluster_columns = FALSE,
+             column_names_rot = 45,
+             col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+             cell_fun = function(j, i, x, y, width, height, fill) {
+               grid.text(annot_prepped_files$by_category_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+             }))
+```
+
+
+### By pseudogene partition
+
+```{r overall_heatmap_by_partition, fig.width = 10, fig.height = 6}
+draw(column_title = "Cluster breakdown by pangenome partition, for COG-category annotated clusters",
+     Heatmap(matrix = as.matrix(annot_prepped_files$by_pangenome),
+            name = "Percent",
+            column_labels = c("Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene"),
+            row_names_side = "left",
+            row_labels = gt_render(paste("*", gsub("_", " ", rownames(annot_prepped_files$by_pangenome)), "*", sep = "")),
+            column_split = c("a) Ultra-cloud", "a) Ultra-cloud", "a) Ultra-cloud", "b) Other-cloud", "b) Other-cloud", "b) Other-cloud", "c) Shell", "c) Shell", "c) Shell", "d) Soft-core", "d) Soft-core", "d) Soft-core"),
+            cluster_rows = FALSE,
+            column_gap = unit(5, "mm"),
+            cluster_columns = FALSE,
+            column_names_rot = 45,
+            col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+            cell_fun = function(j, i, x, y, width, height, fill) {
+              grid.text(annot_prepped_files$by_pangenome_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+            })
+)
+```
+
+
+## Breakdown by COG category {.tabset}
+
+```{r COG_looping, results = 'asis', echo = FALSE, fig.width = 10, fig.height = 6}
+for (COG_category in rownames(COG_category_descrip)) {
+  
+  cat('###', COG_category, "-", COG_category_descrip[COG_category, 1], '{.tabset}', '\n')
+  
+  COG_clusters <- rownames(COG_category_annot)[grep(COG_category, COG_category_annot$COG_category)]
+  
+  COG_prepped_files <- prep_heatmap_input(COG_clusters)
+ 
+  
+  write.table(x = COG_prepped_files$by_category,
+            file = paste("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/by_cog_category/", COG_category, ".annot_percent_by_type.tsv", sep = ""),
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+  COG.category_by_category_fill_to_write <- gsub("\n", " ", COG_prepped_files$by_category_fill)
+  rownames(COG.category_by_category_fill_to_write) <- rownames(COG_prepped_files$by_category)
+  write.table(x = COG.category_by_category_fill_to_write,
+              file = paste("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/by_cog_category/", COG_category, ".annot_percent_by_type_fill.tsv", sep = ""),
+              col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+  write.table(x = COG_prepped_files$by_pangenome,
+            file = paste("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/by_cog_category/", COG_category, ".annot_percent_by_partition.tsv", sep = ""),
+            col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+
+  COG.category_by_pangenome_fill_to_write <- gsub("\n", " ", COG_prepped_files$by_pangenome_fill)
+  rownames(COG.category_by_pangenome_fill_to_write) <- rownames(COG_prepped_files$by_pangenome)
+  write.table(x = COG.category_by_pangenome_fill_to_write,
+              file = paste("/data1/gdouglas/projects/accessory_vs_pseudogene/summary/cluster_breakdown_tables/by_cog_category/", COG_category, ".annot_percent_by_partition_fill.tsv", sep = ""),
+              col.names = NA, row.names = TRUE, sep = "\t", quote = FALSE)
+  
+  
+  cat('####', 'By cluster type', '\n')
+
+  cat('\n\n')
+  
+  draw(column_title = paste("Pangenome partitions of intact vs pseudogene, for ", COG_category, "-annotated clusters", sep = ""),
+       Heatmap(matrix = as.matrix(COG_prepped_files$by_category),
+             name = "Percent",
+             row_names_side = "left",
+             row_labels = gt_render(paste("*", gsub("_", " ", rownames(COG_prepped_files$by_category)), "*", sep = "")),
+             column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+             column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
+             cluster_rows = FALSE,
+             column_gap = unit(5, "mm"),
+             cluster_columns = FALSE,
+             column_names_rot = 45,
+             col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+             cell_fun = function(j, i, x, y, width, height, fill) {
+               grid.text(COG_prepped_files$by_category_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+             })
+  )
+  
+  cat('\n\n')
+  
+  cat('####', 'By pseudogene partition', '\n')
+  
+  draw(column_title = paste("Breakdown of intact vs cloud per pangenome partition, COG category:", COG_category),
+       Heatmap(matrix = as.matrix(COG_prepped_files$by_pangenome),
+            name = "Percent",
+            column_labels = c("Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene", "Intact", "Mixed", "Pseudogene"),
+            row_names_side = "left",
+            row_labels = gt_render(paste("*", gsub("_", " ", rownames(COG_prepped_files$by_pangenome)), "*", sep = "")),
+            column_split = c("a) Ultra-cloud", "a) Ultra-cloud", "a) Ultra-cloud", "b) Other-cloud", "b) Other-cloud", "b) Other-cloud", "c) Shell", "c) Shell", "c) Shell", "d) Soft-core", "d) Soft-core", "d) Soft-core"),
+            cluster_rows = FALSE,
+            column_gap = unit(5, "mm"),
+            cluster_columns = FALSE,
+            column_names_rot = 45,
+            col = colorRamp2(c(0, 50, 100), c("slateblue1","white", "red")),
+            cell_fun = function(j, i, x, y, width, height, fill) {
+              grid.text(COG_prepped_files$by_pangenome_fill[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+            })
+  )
+  
+  cat('\n\n')
+   
+}
+```
+
+
+# Session info {.tabset}
+
+## Hide session info
+
+## Show session info
+
+Session details printed out for reproducibility.
+
+```{r session_info}
+sessionInfo()
+```
