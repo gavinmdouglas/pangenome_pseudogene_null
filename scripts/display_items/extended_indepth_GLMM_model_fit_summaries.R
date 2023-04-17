@@ -43,9 +43,9 @@ rownames(glmm_fit.info) <- NULL
 
 glmm_fit.info$partition_clean <- NA
 glmm_fit.info$partition_clean[which(glmm_fit.info$partition == "shell")] <- "Shell"
-glmm_fit.info$partition_clean[which(glmm_fit.info$partition == "other.cloud")] <- "Other-cloud"
-glmm_fit.info$partition_clean[which(glmm_fit.info$partition == "ultra.cloud")] <- "Ultra-cloud"
-glmm_fit.info$partition_clean <- factor(glmm_fit.info$partition_clean, levels = c("Ultra-cloud", "Other-cloud", "Shell"))
+glmm_fit.info$partition_clean[which(glmm_fit.info$partition == "other.cloud")] <- "Other-rare"
+glmm_fit.info$partition_clean[which(glmm_fit.info$partition == "ultra.cloud")] <- "Ultra-rare"
+glmm_fit.info$partition_clean <- factor(glmm_fit.info$partition_clean, levels = c("Ultra-rare", "Other-rare", "Shell"))
 
 glmm_fit.info$model <- gsub("COG.only_", "COG_", glmm_fit.info$model)
 glmm_fit.info$model <- factor(glmm_fit.info$model, levels = rev(c("species.only",
@@ -96,29 +96,29 @@ ggsave(plot = norm_AIC_barplot,
        device = "pdf", width = 13, height = 10, units = "in", dpi = 400)
 
 
-# Summarize variance explained by each random effect.
-# Optional plot that could also be included.
-glmm_final_varcor <- do.call(rbind, glmm_final_varcor_RAW)
-rownames(glmm_final_varcor) <- NULL
-
-glmm_final_varcor$random_effect_formula <- NA
-glmm_final_varcor$random_effect_formula[which(glmm_final_varcor$random_effect == "species")] <- "(1 | species)"
-glmm_final_varcor$random_effect_formula[which(glmm_final_varcor$random_effect == "COG_category:species")] <- "(1 | COG-category : species)"
-glmm_final_varcor$random_effect_formula[which(glmm_final_varcor$random_effect == "NO_redundant_intact_COG:species")] <- "(1 | non-redundant-status : species)"
-
-glmm_final_varcor$random_effect_formula <- factor(glmm_final_varcor$random_effect_formula,
-                                           levels = rev(c("(1 | species)", "(1 | COG-category : species)", "(1 | non-redundant-status : species)")))
-
-glmm_final_varcor$partition_clean <- NA
-glmm_final_varcor$partition_clean[which(glmm_final_varcor$partition == "shell")] <- "Shell"
-glmm_final_varcor$partition_clean[which(glmm_final_varcor$partition == "other.cloud")] <- "Other-cloud"
-glmm_final_varcor$partition_clean[which(glmm_final_varcor$partition == "ultra.cloud")] <- "Ultra-cloud"
-glmm_final_varcor$partition_clean <- factor(glmm_final_varcor$partition_clean, levels = c("Ultra-cloud", "Other-cloud", "Shell"))
-
-ggplot(data = glmm_final_varcor, aes(x = sd, y = random_effect_formula)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(partition_clean ~ ., scales = "free_x") +
-  xlab("Standard deviation") +
-  ylab("Random effect") +
-  theme_bw()
-
+## Summarize variance explained by each random effect.
+## Optional plot that could also be included.
+# glmm_final_varcor <- do.call(rbind, glmm_final_varcor_RAW)
+# rownames(glmm_final_varcor) <- NULL
+# 
+# glmm_final_varcor$random_effect_formula <- NA
+# glmm_final_varcor$random_effect_formula[which(glmm_final_varcor$random_effect == "species")] <- "(1 | species)"
+# glmm_final_varcor$random_effect_formula[which(glmm_final_varcor$random_effect == "COG_category:species")] <- "(1 | COG-category : species)"
+# glmm_final_varcor$random_effect_formula[which(glmm_final_varcor$random_effect == "NO_redundant_intact_COG:species")] <- "(1 | non-redundant-status : species)"
+# 
+# glmm_final_varcor$random_effect_formula <- factor(glmm_final_varcor$random_effect_formula,
+#                                            levels = rev(c("(1 | species)", "(1 | COG-category : species)", "(1 | non-redundant-status : species)")))
+# 
+# glmm_final_varcor$partition_clean <- NA
+# glmm_final_varcor$partition_clean[which(glmm_final_varcor$partition == "shell")] <- "Shell"
+# glmm_final_varcor$partition_clean[which(glmm_final_varcor$partition == "other.cloud")] <- "Other-rare"
+# glmm_final_varcor$partition_clean[which(glmm_final_varcor$partition == "ultra.cloud")] <- "Ultra-rare"
+# glmm_final_varcor$partition_clean <- factor(glmm_final_varcor$partition_clean, levels = c("Ultra-rare", "Other-rare", "Shell"))
+# 
+# ggplot(data = glmm_final_varcor, aes(x = sd, y = random_effect_formula)) +
+#   geom_bar(stat = "identity") +
+#   facet_wrap(partition_clean ~ ., scales = "free_x") +
+#   xlab("Standard deviation") +
+#   ylab("Random effect") +
+#   theme_bw()
+# 

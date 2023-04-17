@@ -49,6 +49,8 @@ round(mean(ORs), 2)
 round(sd(ORs), 2)
 length(which(Ps < 0.05))
 
+rownames(all.clusters_percent_by_type_fill)[which((Ps < 0.05) & (ORs > 1))]
+rownames(all.clusters_percent_by_type_fill)[which((Ps < 0.05) & (ORs < 1))]
 
 # Percents by pangenome partition
 all.clusters_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type.tsv.gz",

@@ -18,7 +18,7 @@ glmm_final_summaries <- do.call(rbind, glmm_final_summaries_RAW)
 rownames(glmm_final_summaries) <- NULL
 
 glmm_final_summaries$Type <- NA
-glmm_final_summaries[which(glmm_final_summaries$variable == "(Intercept)"), "Type"] <- "Intercept (COG category K,\nredundant COG id)"
+glmm_final_summaries[which(glmm_final_summaries$variable == "(Intercept)"), "Type"] <- "Intercept"
 glmm_final_summaries[which(glmm_final_summaries$variable == "(Intercept)"), "variable"] <- "Intercept"
 
 glmm_final_summaries[grep("NO_redundant", glmm_final_summaries$variable), "Type"] <- "Non-redundant"
@@ -45,7 +45,7 @@ glmm_final_summaries <- glmm_final_summaries[-which(glmm_final_summaries$variabl
 glmm_final_summaries$variable <- gsub(":Non-redundant", " (Non-redundant)", glmm_final_summaries$variable)
 glmm_final_summaries$Type[which(glmm_final_summaries$Type == "Non-redundant")] <- "Non-redundant\n+ COG category:Non-redundant"
 
-glmm_final_summaries$Type <- factor(glmm_final_summaries$Type, levels = c("Intercept (COG category K,\nredundant COG id)",
+glmm_final_summaries$Type <- factor(glmm_final_summaries$Type, levels = c("Intercept",
                                                                           "COG category", "Non-redundant\n+ COG category:Non-redundant"))
 
 glmm_final_summaries_only.sig <- glmm_final_summaries[which(glmm_final_summaries$Pr...z.. < 0.05), ]

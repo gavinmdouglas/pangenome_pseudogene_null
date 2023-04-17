@@ -6,7 +6,7 @@ glmm_fit.info_RAW <- list()
 glmm_final_summaries_RAW <- list()
 
 # Compare the model fits based on varying parameter complexity.
-# Restricted to shell and other-cloud
+# Restricted to shell and Other-rare
 for (partition in c("shell", "other.cloud")) {
 
   glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
@@ -53,7 +53,7 @@ glmm_final_summaries$Type <- factor(glmm_final_summaries$Type, levels = c("Inter
 
 glmm_final_summaries$partition_clean <- glmm_final_summaries$partition
 glmm_final_summaries$partition_clean[which(glmm_final_summaries$partition == "shell")] <- "Shell"
-glmm_final_summaries$partition_clean[which(glmm_final_summaries$partition == "other.cloud")] <- "Other-cloud"
+glmm_final_summaries$partition_clean[which(glmm_final_summaries$partition == "other.cloud")] <- "Other-rare"
 
 glmm_final_summaries_only.sig <- glmm_final_summaries[which(glmm_final_summaries$Pr...z.. < 0.05), ]
 
@@ -64,7 +64,7 @@ glmm_final_summaries_only.sig$variable <- factor(glmm_final_summaries_only.sig$v
                                                  levels = rev(c("Intercept", COG_category_variables, redundant_interaction_variables)))
 
 
-glmm_final_summaries$partition_clean <- factor(glmm_final_summaries$partition_clean, levels = c("Other-cloud", "Shell"))
+glmm_final_summaries$partition_clean <- factor(glmm_final_summaries$partition_clean, levels = c("Other-rare", "Shell"))
 
 
 coef_barplot <- ggplot(data = glmm_final_summaries_only.sig, aes(x = Estimate, y = variable, fill = Type)) +

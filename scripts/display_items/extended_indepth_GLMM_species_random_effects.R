@@ -5,7 +5,10 @@ library(ggplot2)
 random_effects_species <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/species_random_effects.tsv.gz",
                                      header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 
-random_effects_species$partition <- factor(random_effects_species$partition, levels = c("Ultra-cloud", "Other-cloud", "Shell"))
+random_effects_species[which(random_effects_species$partition == "Ultra-cloud"), "partition"] <- "Ultra-rare"
+random_effects_species[which(random_effects_species$partition == "Other-cloud"), "partition"] <- "Other-rare"
+
+random_effects_species$partition <- factor(random_effects_species$partition, levels = c("Ultra-rare", "Other-rare", "Shell"))
 
 colnames(random_effects_species)[which(colnames(random_effects_species) == "(Intercept)")] <- "Intercept"
 

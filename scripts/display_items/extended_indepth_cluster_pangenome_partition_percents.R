@@ -23,7 +23,7 @@ all.clusters_percent_by_type_heatmap <- Heatmap(matrix = as.matrix(all.clusters_
                                                       name = "Percent",
                                                       row_names_side = "left",
                                                       row_labels = gt_render(paste("*", gsub("_", " ", rownames(all.clusters_percent_by_type)), "*", sep = "")),
-                                                      column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+                                                      column_labels = c("Ultra-rare", "Other-rare", "Shell", "Soft-core", "Ultra-rare", "Other-rare", "Shell", "Soft-core", "Ultra-rare", "Other-rare", "Shell", "Soft-core"),
                                                       column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
                                                       cluster_rows = FALSE,
                                                       column_gap = unit(5, "mm"),
@@ -49,7 +49,7 @@ unannot_percent_by_type.cell_heatmap <- Heatmap(matrix = as.matrix(unannot_perce
                                                 name = "Percent",
                                                 row_names_side = "left",
                                                 row_labels = gt_render(paste("*", gsub("_", " ", rownames(unannot_percent_by_type.cell)), "*", sep = "")),
-                                                column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+                                                column_labels = c("Ultra-rare", "Other-rare", "Shell", "Soft-core", "Ultra-rare", "Other-rare", "Shell", "Soft-core", "Ultra-rare", "Other-rare", "Shell", "Soft-core"),
                                                 column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
                                                 cluster_rows = FALSE,
                                                 column_gap = unit(5, "mm"),
@@ -75,7 +75,7 @@ cog.category.annot_percent_by_type_heatmap <- Heatmap(matrix = as.matrix(cog.cat
                                                       name = "Percent",
                                                       row_names_side = "left",
                                                       row_labels = gt_render(paste("*", gsub("_", " ", rownames(cog.category.annot_percent_by_type)), "*", sep = "")),
-                                                      column_labels = c("Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core", "Ultra-cloud", "Other-cloud", "Shell", "Soft-core"),
+                                                      column_labels = c("Ultra-rare", "Other-rare", "Shell", "Soft-core", "Ultra-rare", "Other-rare", "Shell", "Soft-core", "Ultra-rare", "Other-rare", "Shell", "Soft-core"),
                                                       column_split = c("Intact", "Intact", "Intact", "Intact", "Mixed", "Mixed", "Mixed", "Mixed", "Pseudogene", "Pseudogene", "Pseudogene", "Pseudogene"),
                                                       cluster_rows = FALSE,
                                                       column_gap = unit(5, "mm"),
@@ -97,9 +97,9 @@ cog.category.annot_percent_by_type_heatmap <- plot_grid(grid.grabExpr(draw(cog.c
                                                                            column_title = 'Percent of clusters (restricted to only those with COG category annotations) per pangenome partition')))
 
 ggsave(plot = all.cluster_and_unannot_heatmaps,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_all.cluster_and_unannot_heatmaps.png",
-       device = "png", width = 12, height = 12, units = "in", dpi = 300)
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_all.cluster_and_unannot_heatmaps.pdf",
+       device = "pdf", width = 12, height = 12, units = "in", dpi = 400)
 
 ggsave(plot = cog.category.annot_percent_by_type_heatmap,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_cog.category.annot_percent_by_type_heatmap.png",
-       device = "png", width = 12, height = 6, units = "in", dpi = 300)
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_cog.category.annot_percent_by_type_heatmap.pdf",
+       device = "pdf", width = 12, height = 6, units = "in", dpi = 400)
