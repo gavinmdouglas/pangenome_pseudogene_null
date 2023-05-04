@@ -36,7 +36,7 @@ row_splits <- factor(c('Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.
                        'Model\nfit'),
                      levels = c('Intercept\ncoef.', 'Slope\ncoef.', 'Model\nfit'))
 
-heatmap_rank_based_linear_coef_raw <- Heatmap(matrix = as.matrix(pvalues_discrete),
+heatmap_linear_coef_raw <- Heatmap(matrix = as.matrix(pvalues_discrete),
                                           name = 'P-value',
                                           row_names_side = "left",
                                           column_labels = clean_variables,
@@ -54,8 +54,8 @@ heatmap_rank_based_linear_coef_raw <- Heatmap(matrix = as.matrix(pvalues_discret
                                             grid.text(format(round(estimates[i, j], digits=3), nsmall = 3), x, y, gp = gpar(fontsize = 10, fontface="bold"))
                                           })
 
-heatmap_rank_based_linear_coef <- cowplot::plot_grid(grid.grabExpr(draw(heatmap_rank_based_linear_coef_raw)))
+heatmap_linear_coef <- cowplot::plot_grid(grid.grabExpr(draw(heatmap_linear_coef_raw)))
 
-ggsave(plot = heatmap_rank_based_linear_coef,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_rank_based_linear_model_coef.pdf",
+ggsave(plot = heatmap_linear_coef,
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_linear_model_coef.pdf",
        device = "pdf", width = 6, height = 5, units = "in", dpi = 600)
