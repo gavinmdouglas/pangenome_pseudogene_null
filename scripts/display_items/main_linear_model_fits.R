@@ -2,7 +2,7 @@ rm(list = ls(all.names = TRUE))
 
 library(ComplexHeatmap)
 
-model_summaries <- read.table(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/rank_based_linear_coef.tsv.gz',
+model_summaries <- read.table(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/linear_model_coef.tsv.gz',
                               sep = '\t', stringsAsFactors = FALSE, header = TRUE)
 
 estimates <- model_summaries[, grep('estimate', colnames(model_summaries))]
@@ -28,26 +28,33 @@ class_count_annotation <- rowAnnotation(`No.\ngenomes\nin class` = class_count,
                                         na_col = 'white',
                                         show_annotation_name = FALSE)
 
+model_summaries$Variable[which(model_summaries$Variable == "Adjusted R-squared")] <- "\"Adjusted R\"^2"
+
+row_splits <- factor(c('Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.',
+                       'Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.',
+                       'Slope\ncoef.', 'Slope\ncoef.',
+                       'Model\nfit'),
+                     levels = c('Intercept\ncoef.', 'Slope\ncoef.', 'Model\nfit'))
+
 heatmap_rank_based_linear_coef_raw <- Heatmap(matrix = as.matrix(pvalues_discrete),
                                           name = 'P-value',
                                           row_names_side = "left",
                                           column_labels = clean_variables,
-                                          row_labels = model_summaries$Variable,
-                                          row_split = c('Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.',
-                                                        'Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.', 'Intercept\ncoef.',
-                                                        'Slope\ncoef.', 'Slope\ncoef.'),
+                                          row_labels = parse(text = model_summaries$Variable),
+                                          row_split = row_splits,
                                           cluster_columns = FALSE,
                                           cluster_rows = FALSE,
+                                          cluster_row_slices = FALSE,
                                           column_names_rot = 45,
                                           row_title_rot = 0,
                                           row_gap=unit(0.05, "npc"),
                                           right_annotation = class_count_annotation,
                                           col = c("darkseagreen2", "gray95"),
                                           cell_fun = function(j, i, x, y, width, height, fill) {
-                                            grid.text(estimates[i, j], x, y, gp = gpar(fontsize = 10, fontface="bold"))
+                                            grid.text(format(round(estimates[i, j], digits=3), nsmall = 3), x, y, gp = gpar(fontsize = 10, fontface="bold"))
                                           })
 
-heatmap_rank_based_linear_coef <- plot_grid(grid.grabExpr(draw(heatmap_rank_based_linear_coef_raw)))
+heatmap_rank_based_linear_coef <- cowplot::plot_grid(grid.grabExpr(draw(heatmap_rank_based_linear_coef_raw)))
 
 ggsave(plot = heatmap_rank_based_linear_coef,
        filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_rank_based_linear_model_coef.pdf",

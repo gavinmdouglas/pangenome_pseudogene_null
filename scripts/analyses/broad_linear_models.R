@@ -1,8 +1,6 @@
 rm(list = ls(all.names = TRUE))
 
-library(Rfit)
-
-# Fit rank-based linear models on pangenome diversity metrics vs molecular evolution metrics and taxonomic classes.
+# Fit linear models on pangenome diversity metrics vs molecular evolution metrics and taxonomic classes.
 pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
@@ -35,9 +33,9 @@ for (response in response_variables) {
 
   pangenome[, response] <- (pangenome[, response] - mean(pangenome[, response])) / sd(pangenome[, response])
 
-  out_models[[response]] <- Rfit::rfit(formula = paste0(response, ' ~ class_clean + ds_zscore + dnds_zscore'), data = pangenome)
+  out_models[[response]] <- lm(formula = paste0(response, ' ~ class_clean + ds_zscore + dnds_zscore'), data = pangenome)
 
 }
 
 saveRDS(object = out_models,
-        file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/pangenome_rank_based_linear_models.rds')
+        file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/pangenome_linear_models.rds')

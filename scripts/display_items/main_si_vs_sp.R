@@ -5,7 +5,7 @@ library(ggplot2)
 pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
-upper_annotation <- "More positive selection driving either gain\nin rare accessory genes or loss of pseudogenes?"
+upper_annotation <- "More positive selection driving either\ngain in rare accessory genes or loss\nof pseudogenes?"
 lower_annotation <- "Less positive selection driving either\ngain in rare accessory genes or loss\nof pseudogenes? Insufficient time?"
 
 si_vs_sp <- ggplot(data = pangenome,
@@ -37,14 +37,14 @@ si_vs_sp <- ggplot(data = pangenome,
                          linewidth = 5) +
             annotate(geom = "text",
                      x = 0,
-                     y = 10.25,
+                     y = 10.5,
                      color = "blue",
                      label = upper_annotation,
                      hjust = 0,
                      parse = FALSE) +
             annotate(geom = "text",
-                     x = 47.5,
-                     y = 0.75,
+                     x = 40,
+                     y = 0.4,
                      color = "red",
                      label = lower_annotation,
                      hjust = 0,
@@ -54,5 +54,5 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        plot = si_vs_sp,
        device = 'pdf',
        dpi = 600,
-       width = 8,
-       height = 7)
+       width = 6,
+       height = 5)
