@@ -1,5 +1,9 @@
 rm(list = ls(all.names = TRUE))
 
+### Note that these were the original dS and dN/dS values computed, but we elected to focus the analysis on
+### metrics based on the concatenated core genome rather than the median of individual core genes and
+### focused solely on pairwise dN/dS (rather than the MG94 approach).
+
 focal_species <- read.table("/data1/gdouglas/projects/accessory_vs_pseudogene/mapfiles/focal_species.txt",
                             stringsAsFactors = FALSE, header = FALSE)$V1
 
