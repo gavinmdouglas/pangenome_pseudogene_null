@@ -1,13 +1,9 @@
 # pangenome_pseudogene_null
 
-Code for in-progress manuscript: "Pseudogenes as a neutral reference for detecting selection in prokaryotic pangenomes"
-
-Note that key datafiles will be made available as a FigShare repository.
+Code for manuscript: "Pseudogenes as a neutral reference for detecting selection in prokaryotic pangenomes"
 
 
 ### Repository structure:
-
-* `display_items` - Figures and tables produced for manuscript
 
 * `scripts`
 
