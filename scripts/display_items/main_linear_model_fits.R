@@ -20,8 +20,8 @@ clean_variables[which(clean_variables == 'si_sp_estimate')] <- expression(s[i]/s
 
 class_count <- model_summaries$Count
 
-class_count_annotation <- rowAnnotation(`No.\ngenomes\nin class` = class_count,
-                                        col = list(`No.\ngenomes\nin class` = circlize::colorRamp2(c(0,
+class_count_annotation <- rowAnnotation(`No.\nspecies\nin class` = class_count,
+                                        col = list(`No.\nspecies\nin class` = circlize::colorRamp2(c(0,
                                                                                                      min(class_count, na.rm = TRUE),
                                                                                                      max(class_count, na.rm = TRUE)),
                                                                                                    c("grey", "skyblue1", "skyblue4"))),

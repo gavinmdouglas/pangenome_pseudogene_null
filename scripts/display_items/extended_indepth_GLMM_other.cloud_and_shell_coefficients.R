@@ -21,7 +21,7 @@ glmm_final_summaries <- do.call(rbind, glmm_final_summaries_RAW)
 rownames(glmm_final_summaries) <- NULL
 
 glmm_final_summaries$Type <- NA
-glmm_final_summaries[which(glmm_final_summaries$variable == "(Intercept)"), "Type"] <- "Intercept (COG category K,\nredundant COG id)"
+glmm_final_summaries[which(glmm_final_summaries$variable == "(Intercept)"), "Type"] <- "Intercept"
 glmm_final_summaries[which(glmm_final_summaries$variable == "(Intercept)"), "variable"] <- "Intercept"
 
 glmm_final_summaries[grep("NO_redundant", glmm_final_summaries$variable), "Type"] <- "Non-redundant"
@@ -46,10 +46,13 @@ for (partition_level in unique(glmm_final_summaries$partition)) {
 
 glmm_final_summaries <- glmm_final_summaries[-which(glmm_final_summaries$variable == "Non-redundant"), ]
 glmm_final_summaries$variable <- gsub(":Non-redundant", " (Non-redundant)", glmm_final_summaries$variable)
-glmm_final_summaries$Type[which(glmm_final_summaries$Type == "Non-redundant")] <- "Non-redundant\n+ COG category:Non-redundant"
 
-glmm_final_summaries$Type <- factor(glmm_final_summaries$Type, levels = c("Intercept (COG category K,\nredundant COG id)",
-                                                                          "COG category", "Non-redundant\n+ COG category:Non-redundant"))
+non_redundant_category_string <- "Non-redundant\n(and interaction)"
+glmm_final_summaries$Type[which(glmm_final_summaries$Type == "Non-redundant")] <- non_redundant_category_string
+
+glmm_final_summaries$Type <- factor(glmm_final_summaries$Type, levels = c("Intercept",
+                                                                          "COG category",
+                                                                          non_redundant_category_string))
 
 glmm_final_summaries$partition_clean <- glmm_final_summaries$partition
 glmm_final_summaries$partition_clean[which(glmm_final_summaries$partition == "shell")] <- "Shell"
@@ -58,7 +61,7 @@ glmm_final_summaries$partition_clean[which(glmm_final_summaries$partition == "ot
 glmm_final_summaries_only.sig <- glmm_final_summaries[which(glmm_final_summaries$Pr...z.. < 0.05), ]
 
 COG_category_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type == "COG category"), "variable"], decreasing = TRUE))
-redundant_interaction_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type =="Non-redundant\n+ COG category:Non-redundant"), "variable"], decreasing = TRUE))
+redundant_interaction_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type == non_redundant_category_string), "variable"], decreasing = TRUE))
 
 glmm_final_summaries_only.sig$variable <- factor(glmm_final_summaries_only.sig$variable,
                                                  levels = rev(c("Intercept", COG_category_variables, redundant_interaction_variables)))
