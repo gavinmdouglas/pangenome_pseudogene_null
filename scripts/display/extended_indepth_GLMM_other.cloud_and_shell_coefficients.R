@@ -77,7 +77,10 @@ coef_barplot <- ggplot(data = glmm_final_summaries_only.sig, aes(x = Estimate, y
                         ylab("Significant coefficient") +
                         geom_vline(xintercept = 0, linetype="dotted", 
                                    color = "black") +
-                        theme(legend.position="bottom")
+                        theme(legend.position="bottom") +
+                        geom_errorbar(aes(xmin = Estimate - Std..Error,
+                                          xmax = Estimate + Std..Error),
+                                      width = 0.2, color = "black")
 
 ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_glmm_other.cloud_and_shell_coef.pdf',
        plot = coef_barplot,
