@@ -1,6 +1,6 @@
 rm(list = ls(all.names = TRUE))
 
-pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
+pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 # Spearman correlation

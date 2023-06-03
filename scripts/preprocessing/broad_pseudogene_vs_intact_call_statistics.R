@@ -2,12 +2,12 @@ rm(list = ls(all.names = TRUE))
 
 # Summaries of numbers, sizes, etc. of called intact genes vs pseudogenes.
 
-long_to_short <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/focal_and_non.focal_full_to_short.tsv.gz",
+long_to_short <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/focal_and_non.focal_full_to_short.tsv.gz",
                             header = FALSE, sep = '\t', stringsAsFactors = FALSE, row.names = 1)
 colnames(long_to_short) <- 'short'
 
 # First read in information based on the focal species subsampled to 20 genomes each.
-focal_species <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/focal_species.txt',
+focal_species <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/focal_species.txt',
                             header = FALSE, sep = "", stringsAsFactors = FALSE)$V1
 focal_pseudogene_lengths_raw <- list()
 focal_pseudogene_counts_raw <- list()
@@ -111,7 +111,7 @@ accession_numbers$number_of_genes <- accession_gene_numbers[rownames(accession_n
 rownames(accession_numbers) <- NULL
 
 write.table(x = accession_numbers,
-            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/element_counts.tsv',
+            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/element_counts.tsv',
             sep = '\t', quote = FALSE, row.names = FALSE, col.names = TRUE)
 
 
@@ -125,9 +125,9 @@ gene_sizes <- gene_sizes[, c('accession', 'V1', 'V2')]
 colnames(gene_sizes) <- c('accession', 'gene', 'length')
 
 write.table(x = gene_sizes,
-            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/gene_sizes.tsv',
+            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/gene_sizes.tsv',
             sep = '\t', quote = FALSE, row.names = FALSE, col.names = TRUE)
 
 write.table(x = pseudogene_sizes,
-            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/pseudogene_sizes.tsv',
+            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/pseudogene_sizes.tsv',
             sep = '\t', quote = FALSE, row.names = FALSE, col.names = TRUE)

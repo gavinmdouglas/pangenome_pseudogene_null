@@ -8,7 +8,7 @@ library(ggbeeswarm)
 COG_id_descrip <- read.table("/data1/gdouglas/db/COG_definitions/cog-20.def.tab",
                              header = FALSE, sep = "\t", stringsAsFactors = FALSE, quote = "", comment.char = "", row.names = 1)
 
-mobilome_COG_hits <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/COG_enrichment_results/ultra.cloud-COG-gene-enrichments.tsv.gz",
+mobilome_COG_hits <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/COG_enrichment_results/ultra.cloud-COG-gene-enrichments.tsv.gz",
                                    header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 mobilome_COG_hits <- mobilome_COG_hits[which(mobilome_COG_hits$fdr < 0.05), ]
 mobilome_COG_hits <- mobilome_COG_hits[which(mobilome_COG_hits$COG_category == "X"), ]

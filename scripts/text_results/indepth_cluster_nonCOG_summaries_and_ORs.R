@@ -4,10 +4,10 @@ rm(list = ls(all.names = TRUE))
 # Also % in cloud partitions vs core
 # Also compute Fisher's exact tests and report summary
 
-all.clusters_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type_fill.tsv.gz",
+all.clusters_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type_fill.tsv.gz",
                                                       header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
-cog.category.annot_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/cog.category.annot_percent_by_type_fill.tsv.gz",
+cog.category.annot_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/cog.category.annot_percent_by_type_fill.tsv.gz",
                                                        header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 # Get counts only:
@@ -53,7 +53,7 @@ rownames(all.clusters_percent_by_type_fill)[which((Ps < 0.05) & (ORs > 1))]
 rownames(all.clusters_percent_by_type_fill)[which((Ps < 0.05) & (ORs < 1))]
 
 # Percents by pangenome partition
-all.clusters_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type.tsv.gz",
+all.clusters_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type.tsv.gz",
                                                 header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 round(mean(all.clusters_percent_by_type$intact_ultra.cloud + all.clusters_percent_by_type$intact_other.cloud), 2)

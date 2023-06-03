@@ -2,7 +2,7 @@ rm(list = ls(all.names = TRUE))
 
 library(ggplot2)
 
-random_effects_species <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/species_random_effects.tsv.gz",
+random_effects_species <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/species_random_effects.tsv.gz",
                                      header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 
 random_effects_species[which(random_effects_species$partition == "Ultra-cloud"), "partition"] <- "Ultra-rare"

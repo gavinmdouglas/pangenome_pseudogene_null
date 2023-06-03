@@ -10,7 +10,7 @@ overall_p <- function(model_obj) {
 }
 
 
-out_models <- readRDS(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/pangenome_linear_models.rds')
+out_models <- readRDS(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/pangenome_linear_models.rds')
 
 response_variables <- c('mean_num_genes', 'genomic_fluidity', 'mean_percent_singletons_per9', 'si_sp')
 
@@ -61,7 +61,7 @@ model_summaries_reordered['rsquared', paste(response_variables, 'estimate', sep 
 model_summaries_reordered['rsquared', paste(response_variables, 'P', sep = '_')] <- sapply(response_variables, function(x) { format(round(overall_p(out_models[[x]]), digits=3), nsmall = 3) })
 
 write.table(x = model_summaries_reordered,
-            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/linear_model_coef.tsv',
+            file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/linear_model_coef.tsv',
             sep = '\t', row.names = FALSE, col.names = TRUE, quote = FALSE)
 
 options(scipen = 0)

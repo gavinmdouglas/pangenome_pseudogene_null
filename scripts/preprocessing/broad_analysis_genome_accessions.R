@@ -29,5 +29,5 @@ rownames(focal_accessions_df) <- NULL
 accessions <- rbind(accessions, focal_accessions_df)
 
 write.table(x = accessions,
-            file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/accessions.tsv",
+            file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/accessions.tsv",
             row.names = FALSE, col.names = TRUE, quote = FALSE, sep = "\t")

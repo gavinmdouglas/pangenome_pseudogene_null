@@ -5,7 +5,7 @@ library(cowplot)
 
 # Compare mean number and % singletons vs mean number of genes.
 # Also compare with genomic fluidity and show funky species with population substructure.
-pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
+pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 num_any_v_num_single <- ggplot(data = pangenome,
@@ -41,7 +41,7 @@ percent_single_vs_fluidity <- ggplot(data = pangenome,
                                                method = 'spearman', label.y.npc = 'top', cor.coef.name = 'rho',
                                                digits = 3)
 
-Mycoplasmopsis_bovis_panaroo <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/example_Mycoplasmopsis_bovis_panaroo_output.csv.gz',
+Mycoplasmopsis_bovis_panaroo <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/example_Mycoplasmopsis_bovis_panaroo_output.csv.gz',
                                            header = TRUE, sep = ",",  stringsAsFactors = FALSE, quote = "", comment.char = "")
 
 num_isolates_per_gene <- data.frame(rowSums(Mycoplasmopsis_bovis_panaroo[, 4:ncol(Mycoplasmopsis_bovis_panaroo), drop = FALSE] != ''))

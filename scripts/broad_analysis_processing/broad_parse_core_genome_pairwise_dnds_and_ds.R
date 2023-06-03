@@ -1,9 +1,9 @@
 rm(list = ls(all.names = TRUE))
 
-focal_species <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/focal_species.txt',
+focal_species <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/focal_species.txt',
                             stringsAsFactors = FALSE, header = FALSE)$V1
 
-focal_and_nonfocal_species <- rownames(read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/taxonomy.tsv.gz',
+focal_and_nonfocal_species <- rownames(read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/taxonomy.tsv.gz',
                                                   stringsAsFactors = FALSE, header = TRUE, sep = '\t', row.names = 1))
 
 focal_and_nonfocal_species <- sort(focal_and_nonfocal_species)

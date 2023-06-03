@@ -10,8 +10,8 @@ glmm_final_varcor_RAW <- list()
 # First, compare the model fits based on varying parameter complexity.
 for (partition in c("shell", "other.cloud", "ultra.cloud")) {
   
-  glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
-  glmm_summaries_additional <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries_additional.rds", sep = ""))
+  glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
+  glmm_summaries_additional <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries_additional.rds", sep = ""))
   glmm_summaries[["species.only"]] <- glmm_summaries_additional$species_only
   
   

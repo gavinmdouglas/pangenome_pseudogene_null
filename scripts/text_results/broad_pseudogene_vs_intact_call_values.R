@@ -3,20 +3,20 @@ rm(list = ls(all.names = TRUE))
 # Summaries of numbers, sizes, etc. of called intact genes vs pseudogenes.
 
 # First, need to get the genome accession ids of interest (i.e., of filtered species).
-pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
+pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
-sp_taxonomy <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/taxonomy.tsv.gz',
+sp_taxonomy <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/taxonomy.tsv.gz',
                           row.names = 1, stringsAsFactors = FALSE, sep = '\t', header = TRUE)
 sp_taxonomy <- sp_taxonomy[rownames(pangenome), ]
 
-broad_genome_accession <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/genome_info/accessions.tsv.gz",
+broad_genome_accession <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/genome_info/accessions.tsv.gz",
                                      header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 broad_genome_accession <- broad_genome_accession[which(broad_genome_accession$species %in% rownames(pangenome)), ]
 broad_genome_accession <- broad_genome_accession[which(broad_genome_accession$could_download), ]
 
 # Get % of pseudogene elements across genomes.
-element_counts <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/element_counts.tsv.gz',
+element_counts <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/element_counts.tsv.gz',
                              header = TRUE, sep = '\t', stringsAsFactors = FALSE, row.names = 1)
 element_counts <- element_counts[broad_genome_accession$accession, ]
 element_counts$percent_pseudo <- (element_counts$number_of_pseudogenes / (element_counts$number_of_pseudogenes + element_counts$number_of_genes)) * 100
@@ -25,13 +25,13 @@ round(sd(element_counts$percent_pseudo), 2)
 round(min(element_counts$percent_pseudo), 2)
 round(max(element_counts$percent_pseudo), 2)
 
-gene_sizes <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/gene_sizes.tsv.gz',
+gene_sizes <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/gene_sizes.tsv.gz',
                          header = TRUE, sep = '\t', stringsAsFactors = FALSE)
 
-pseudogene_sizes <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/pseudogene_sizes.tsv.gz',
+pseudogene_sizes <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/pseudogene_sizes.tsv.gz',
                                header = TRUE, sep = '\t', stringsAsFactors = FALSE)
 
-genome_sizes <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/genome_info/genome_sizes.tsv.gz',
+genome_sizes <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/genome_info/genome_sizes.tsv.gz',
                            header = FALSE, sep = '\t', stringsAsFactors = FALSE)
 
 

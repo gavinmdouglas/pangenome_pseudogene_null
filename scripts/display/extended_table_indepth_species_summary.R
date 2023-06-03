@@ -11,7 +11,7 @@ rm(list = ls(all.names = TRUE))
 ### (Get standard deviations for all mean computations too - just in case they are useful to report!)
 
 # Initialize table.
-species <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/focal_species.txt",
+species <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/focal_species.txt",
                       header = FALSE, stringsAsFactors = FALSE)$V1
 summary_means <- data.frame(matrix(NA, nrow = length(species), ncol = 17))
 rownames(summary_means) <- species
@@ -34,12 +34,12 @@ colnames(summary_means) <- c("Num_genomes",
                              "Sd_pseudo_percent_cov")
 
 # Read in cluster membership table + definitions of cluster types.
-cluster_breakdown <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_member_breakdown.tsv.gz",
+cluster_breakdown <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_member_breakdown.tsv.gz",
                                 header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 2)
 
-cluster_types <- readRDS(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_types.rds")
+cluster_types <- readRDS(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_types.rds")
 
-per_genome_coverages <- readRDS(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/per_genome_element.type_percent_coverages.rds")
+per_genome_coverages <- readRDS(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/per_genome_element.type_percent_coverages.rds")
 
 # First remove all clusters that are a mix of intact and pseudogene elements.
 cluster_breakdown <- cluster_breakdown[-which(cluster_breakdown$cluster %in% cluster_types$both), ]

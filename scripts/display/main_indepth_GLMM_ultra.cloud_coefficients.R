@@ -8,7 +8,7 @@ glmm_final_summaries_RAW <- list()
 # Parse coefficents for ultra-cloud only.
 partition <- "ultra.cloud"
 
-glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
+glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
 
 glmm_final_summaries_RAW[[partition]] <- data.frame(glmm_summaries$COG.only_species.interaction_redundant.both.interaction$coefficients$cond)
 glmm_final_summaries_RAW[[partition]]$variable <- rownames(glmm_final_summaries_RAW[[partition]])

@@ -9,10 +9,10 @@ library(cowplot)
 library(ggplot2)
 
 # % of clusters by pangenome partition (based on *all* clusters)
-all.clusters_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type.tsv.gz",
+all.clusters_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type.tsv.gz",
                                            header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
-all.clusters_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type_fill.tsv.gz",
+all.clusters_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/all.clusters_percent_by_type_fill.tsv.gz",
                                                       header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 all.clusters_percent_by_type_fill <- apply(X = all.clusters_percent_by_type_fill,
@@ -35,10 +35,10 @@ all.clusters_percent_by_type_heatmap <- Heatmap(matrix = as.matrix(all.clusters_
                                                       })
 
 # % of clusters in above heatmap that are *not* COG-annotated.
-unannot_percent_by_type.cell <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/unannot_percent_by_table.cell.tsv.gz",
+unannot_percent_by_type.cell <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/unannot_percent_by_table.cell.tsv.gz",
                                            header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
-unannot_percent_by_type.cell_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/unannot_percent_by_table.cell_fill.tsv.gz",
+unannot_percent_by_type.cell_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/unannot_percent_by_table.cell_fill.tsv.gz",
                                                 header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 unannot_percent_by_type.cell_fill <- apply(X = unannot_percent_by_type.cell_fill,
@@ -61,10 +61,10 @@ unannot_percent_by_type.cell_heatmap <- Heatmap(matrix = as.matrix(unannot_perce
                                                 })
 
 # % of clusters by pangenome partition (based on COG-category-annotated clusters only)
-cog.category.annot_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/cog.category.annot_percent_by_type.tsv.gz",
+cog.category.annot_percent_by_type <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/cog.category.annot_percent_by_type.tsv.gz",
                                                  header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
-cog.category.annot_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/cluster_breakdown_tables/cog.category.annot_percent_by_type_fill.tsv.gz",
+cog.category.annot_percent_by_type_fill <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/cluster_breakdown_tables/cog.category.annot_percent_by_type_fill.tsv.gz",
                                                        header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 cog.category.annot_percent_by_type_fill <- apply(X = cog.category.annot_percent_by_type_fill,

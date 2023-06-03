@@ -2,7 +2,7 @@ rm(list = ls(all.names = TRUE))
 
 library(ComplexHeatmap)
 
-model_summaries <- read.table(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/linear_model_coef.tsv.gz',
+model_summaries <- read.table(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/linear_model_coef.tsv.gz',
                               sep = '\t', stringsAsFactors = FALSE, header = TRUE)
 
 estimates <- model_summaries[, grep('estimate', colnames(model_summaries))]

@@ -2,7 +2,7 @@ rm(list = ls(all.names = TRUE))
 
 library(ggplot2)
 
-pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
+pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 dnds_vs_ds <- ggplot(data = pangenome,
@@ -20,7 +20,7 @@ dnds_vs_ds <- ggplot(data = pangenome,
 
 
 # Run Partial Spearman's rho of % pseudogene coverage vs dN/dS (while controlling for dS).
-pseudogene_percent_mean_by_species <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/element_info/element_percent_coverage/pseudogene_mean_percent_coverage_by_species.tsv.gz',
+pseudogene_percent_mean_by_species <- read.table('/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/element_info/element_percent_coverage/pseudogene_mean_percent_coverage_by_species.tsv.gz',
                                                  header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 pangenome$mean_percent_coverage_pseudogenes <- pseudogene_percent_mean_by_species[rownames(pangenome), 'mean_percent']

@@ -4,7 +4,7 @@ library(glmmTMB)
 
 num_cores <- 5
 
-element_info <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/element_glmm_input.tsv.gz",
+element_info <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/element_glmm_input.tsv.gz",
                            header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 # Remove rows corresponding to really rare COG categories

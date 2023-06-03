@@ -1,7 +1,7 @@
 rm(list = ls(all.names = TRUE))
 
 # Fit linear models on pangenome diversity metrics vs molecular evolution metrics and taxonomic classes.
-pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
+pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/pangenome_and_related_metrics_filt.tsv.gz",
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 pangenome <- pangenome[which(pangenome$mean_percent_singletons_per9 > 0), ]
@@ -38,4 +38,4 @@ for (response in response_variables) {
 }
 
 saveRDS(object = out_models,
-        file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/pangenome_linear_models.rds')
+        file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/pangenome_linear_models.rds')

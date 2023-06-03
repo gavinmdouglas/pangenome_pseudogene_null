@@ -4,7 +4,7 @@ library(glmmTMB)
 
 num_cores <- 5
 
-element_info <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/element_glmm_input.tsv.gz",
+element_info <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/element_glmm_input.tsv.gz",
                            header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 # Remove rows corresponding to really rare COG categories
@@ -119,9 +119,9 @@ for (partition in c("shell", "other.cloud", "ultra.cloud")) {
   }
   
   saveRDS(object = model_output,
-          file = paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_outputs.rds", sep = ""))
+          file = paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_outputs.rds", sep = ""))
   
   saveRDS(object = model_summaries,
-          file = paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
+          file = paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
 
 }

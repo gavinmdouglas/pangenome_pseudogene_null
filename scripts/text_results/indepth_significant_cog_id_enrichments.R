@@ -4,7 +4,7 @@ COG_description <- read.table("/data1/gdouglas/db/COG_definitions/cog-20.def.tab
                               row.names = 1, header = FALSE, sep = "\t", quote = "",
                               stringsAsFactors = FALSE, comment.char = "")
 
-ultra.cloud_enrich <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/COG_enrichment_results/ultra.cloud-COG-gene-enrichments.tsv.gz",
+ultra.cloud_enrich <- read.table(file = "/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/COG_enrichment_results/ultra.cloud-COG-gene-enrichments.tsv.gz",
                                  header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 
 ultra.cloud_enrich <- ultra.cloud_enrich[which(ultra.cloud_enrich$fdr < 0.05), ]

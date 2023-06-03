@@ -1,6 +1,6 @@
 rm(list = ls(all.names = TRUE))
 
-out_models <- readRDS(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/broad_pangenome_analysis/model_output/pangenome_rank_based_linear_models.rds')
+out_models <- readRDS(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/pangenome_rank_based_linear_models.rds')
 
 si_model_summary <- summary(out_models$si)
 round(si_model_summary$R2, 3)

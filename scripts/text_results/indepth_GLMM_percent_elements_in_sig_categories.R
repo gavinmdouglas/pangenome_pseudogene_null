@@ -10,7 +10,7 @@ glmm_final_summaries_RAW <- list()
 # First, compare the model fits based on varying parameter complexity.
 for (partition in c("shell", "other.cloud", "ultra.cloud")) {
 
-  glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
+  glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
 
   glmm_final_summaries_RAW[[partition]] <- data.frame(glmm_summaries$COG.only_species.interaction_redundant.both.interaction$coefficients$cond)
   glmm_final_summaries_RAW[[partition]]$variable <- rownames(glmm_final_summaries_RAW[[partition]])
@@ -68,7 +68,7 @@ glmm_final_summaries_only.sig$variable <- factor(glmm_final_summaries_only.sig$v
 
 
 
-element_info <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_figshare/indepth_10_species_analysis/element_glmm_input.tsv.gz",
+element_info <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/element_glmm_input.tsv.gz",
                            header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 # Remove rows corresponding to really rare COG categories
