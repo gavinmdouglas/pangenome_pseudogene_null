@@ -10,6 +10,9 @@ partition <- "ultra.cloud"
 
 glmm_summaries <- readRDS(paste("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/glmm_output/", partition, "_model_output_summaries.rds", sep = ""))
 
+COG_to_category <- read.table('/data1/gdouglas/db/COG_definitions/COG_category_descrip_succinct.tsv',
+                              header = FALSE, sep = '\t', stringsAsFactors = FALSE, row.names = 1)
+
 glmm_final_summaries_RAW[[partition]] <- data.frame(glmm_summaries$COG.only_species.interaction_redundant.both.interaction$coefficients$cond)
 glmm_final_summaries_RAW[[partition]]$variable <- rownames(glmm_final_summaries_RAW[[partition]])
 glmm_final_summaries_RAW[[partition]]$partition <- partition
@@ -39,6 +42,10 @@ for (partition_level in unique(glmm_final_summaries$partition)) {
   glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Estimate"] <-
     glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Estimate"] +
     glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$variable == "Non-redundant"), "Estimate"]
+  
+  glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Std..Error"] <-
+    glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Std..Error"] +
+    glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$variable == "Non-redundant"), "Std..Error"]
 }
 
 glmm_final_summaries <- glmm_final_summaries[-which(glmm_final_summaries$variable == "Non-redundant"), ]
@@ -54,14 +61,28 @@ glmm_final_summaries$Type <- factor(glmm_final_summaries$Type, levels = c("Inter
 glmm_final_summaries_only.sig <- glmm_final_summaries[which(glmm_final_summaries$Pr...z.. < 0.05), ]
 
 COG_category_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type == "COG category"), "variable"], decreasing = TRUE))
+orig_COG_category_variables <- COG_category_variables
+COG_category_variables <- paste(COG_category_variables, '-', COG_to_category[COG_category_variables, 'V2'])
+
 redundant_interaction_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type == non_redundant_category_string), "variable"], decreasing = TRUE))
+orig_redundant_interaction_variables <- redundant_interaction_variables
+
+redundant_interaction_variables <- gsub(' \\(Non-redundant\\)', '', redundant_interaction_variables)
+redundant_interaction_variables <- paste(redundant_interaction_variables, '-', COG_to_category[redundant_interaction_variables, 'V2'], '(Non-redun.)')
+
+variable_rename <- data.frame(old = c(orig_COG_category_variables, orig_redundant_interaction_variables),
+                              new = c(COG_category_variables, redundant_interaction_variables))
+rownames(variable_rename) <- variable_rename$old
+
+rownames(glmm_final_summaries_only.sig) <- glmm_final_summaries_only.sig$variable
+glmm_final_summaries_only.sig[rownames(variable_rename), 'variable'] <- variable_rename$new
 
 glmm_final_summaries_only.sig$variable <- factor(glmm_final_summaries_only.sig$variable,
                                                  levels = rev(c("Intercept", COG_category_variables, redundant_interaction_variables)))
 
-
 ultra.cloud_coef_barplot <- ggplot(data = glmm_final_summaries_only.sig, aes(x = Estimate, y = variable, fill = Type)) +
                                     geom_bar(stat="identity") +
+                                    scale_fill_manual(values = c("#b16450", "#a0c68f", "#4f5f42")) +
                                     theme_bw() +
                                     ylab("Significant coefficient") +
                                     geom_vline(xintercept = 0, linetype="dotted", 

@@ -28,12 +28,10 @@ combined_metadata_highqual_RefSeq <- combined_metadata_highqual[grep("^GCF_", ro
 # Make sure that the 10 focal species are ignored.
 focal_species <- read.table("/data1/gdouglas/projects/accessory_vs_pseudogene/mapfiles/species.txt",
                             stringsAsFactors = FALSE)$V1
-focal_species_accessions <- as.character()
-for (sp in focal_species) {
-  focal_species_accessions <- c(focal_species_accessions,
-                                read.table(file = paste("/data1/gdouglas/projects/accessory_vs_pseudogene/genome_accessions/", sp, "_accessions.txt", sep = ""),
-                                           stringsAsFactors = FALSE, header = FALSE)$V1)
-}
+
+focal_species_accessions <- read.table(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/genome_info/accessions.tsv.gz',
+                                       stringsAsFactors = FALSE, header = TRUE, sep = '\t')$V2
+
 
 combined_metadata_highqual_RefSeq_non.focal <- combined_metadata_highqual_RefSeq[which(! rownames(combined_metadata_highqual_RefSeq) %in% focal_species_accessions), ]
 

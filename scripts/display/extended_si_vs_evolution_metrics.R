@@ -8,7 +8,7 @@ pangenome <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zeno
                         header = TRUE, sep = "\t", stringsAsFactors = FALSE, row.names = 1)
 
 dnds_vs_si <- ggplot(data = pangenome,
-                            aes(x = median_MG94_dnds,
+                            aes(x = dnds,
                                 y = mean_percent_singletons_per9)) +
   geom_point() +
   theme_bw() +
@@ -19,7 +19,7 @@ dnds_vs_si <- ggplot(data = pangenome,
   scale_y_continuous(trans='log10')
 
 ds_vs_si <- ggplot(data = pangenome,
-                     aes(x = median_pairwise_ds,
+                     aes(x = ds,
                          y = mean_percent_singletons_per9)) +
   geom_point() +
   theme_bw() +
@@ -30,8 +30,8 @@ ds_vs_si <- ggplot(data = pangenome,
   scale_y_continuous(trans='log10')
 
 ds_vs_dnds <- ggplot(data = pangenome,
-                     aes(x = median_pairwise_ds,
-                         y = median_MG94_dnds)) +
+                     aes(x = ds,
+                         y = dnds)) +
   geom_point() +
   theme_bw() +
   ylab('Median dN/dS across core genes') +

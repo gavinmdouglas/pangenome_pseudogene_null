@@ -2,6 +2,9 @@ rm(list = ls(all.names = TRUE))
 
 library(ggplot2)
 
+COG_to_category <- read.table('/data1/gdouglas/db/COG_definitions/COG_category_descrip_succinct.tsv',
+                              header = FALSE, sep = '\t', stringsAsFactors = FALSE, row.names = 1)
+
 glmm_fit.info_RAW <- list()
 glmm_final_summaries_RAW <- list()
 
@@ -42,6 +45,10 @@ for (partition_level in unique(glmm_final_summaries$partition)) {
   glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Estimate"] <-
     glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Estimate"] +
     glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$variable == "Non-redundant"), "Estimate"]
+  
+  glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Std..Error"] <-
+    glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$Type == "Non-redundant"), "Std..Error"] +
+    glmm_final_summaries[which(glmm_final_summaries$partition == partition_level & glmm_final_summaries$variable == "Non-redundant"), "Std..Error"]
 }
 
 glmm_final_summaries <- glmm_final_summaries[-which(glmm_final_summaries$variable == "Non-redundant"), ]
@@ -61,7 +68,23 @@ glmm_final_summaries$partition_clean[which(glmm_final_summaries$partition == "ot
 glmm_final_summaries_only.sig <- glmm_final_summaries[which(glmm_final_summaries$Pr...z.. < 0.05), ]
 
 COG_category_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type == "COG category"), "variable"], decreasing = TRUE))
+orig_COG_category_variables <- COG_category_variables
+COG_category_variables <- paste(COG_category_variables, '-', COG_to_category[COG_category_variables, 'V2'])
+
 redundant_interaction_variables <- sort(unique(glmm_final_summaries_only.sig[which(glmm_final_summaries_only.sig$Type == non_redundant_category_string), "variable"], decreasing = TRUE))
+orig_redundant_interaction_variables <- redundant_interaction_variables
+
+redundant_interaction_variables <- gsub(' \\(Non-redundant\\)', '', redundant_interaction_variables)
+redundant_interaction_variables <- paste(redundant_interaction_variables, '-', COG_to_category[redundant_interaction_variables, 'V2'], '(Non-redun.)')
+
+variable_rename <- data.frame(old = c('Intercept', orig_COG_category_variables, orig_redundant_interaction_variables),
+                              new = c('Intercept', COG_category_variables, redundant_interaction_variables))
+rownames(variable_rename) <- variable_rename$old
+
+for (i in 1:nrow(glmm_final_summaries_only.sig)) {
+  glmm_final_summaries_only.sig[i, 'variable'] <- variable_rename[glmm_final_summaries_only.sig[i, 'variable'], 'new']
+}
+
 
 glmm_final_summaries_only.sig$variable <- factor(glmm_final_summaries_only.sig$variable,
                                                  levels = rev(c("Intercept", COG_category_variables, redundant_interaction_variables)))
@@ -73,6 +96,7 @@ glmm_final_summaries$partition_clean <- factor(glmm_final_summaries$partition_cl
 coef_barplot <- ggplot(data = glmm_final_summaries_only.sig, aes(x = Estimate, y = variable, fill = Type)) +
                         geom_bar(stat="identity") +
                         theme_bw() +
+                        scale_fill_manual(values = c("#b16450", "#a0c68f", "#4f5f42")) +
                         facet_wrap(. ~ partition_clean) +
                         ylab("Significant coefficient") +
                         geom_vline(xintercept = 0, linetype="dotted", 

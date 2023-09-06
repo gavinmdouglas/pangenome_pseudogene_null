@@ -1,7 +1,6 @@
 rm(list = ls(all.names = TRUE))
 
 # Identify sets of high quality genomes to download.
-
 bacteria_metadata <- read.table("/data1/gdouglas/db/gtdbtk_data_r202/bac120_metadata_r202.tsv.gz",
                            header = TRUE, sep = "\t", stringsAsFactors = FALSE, quote = "", comment.char = "", row.names = 1)
 
