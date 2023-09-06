@@ -101,5 +101,5 @@ ggsave(plot = all.cluster_and_unannot_heatmaps,
        device = "pdf", width = 12, height = 12, units = "in", dpi = 400)
 
 ggsave(plot = cog.category.annot_percent_by_type_heatmap,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_cog.category.annot_percent_by_type_heatmap.pdf",
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_indepth_cog.category.annot_percent_by_type_heatmap.pdf",
        device = "pdf", width = 12, height = 6, units = "in", dpi = 400)
