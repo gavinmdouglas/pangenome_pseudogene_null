@@ -6,11 +6,13 @@ soft.core_cutoff <- list()
 
 pseudo_filt_genomes <- gsub(".txt$", "", list.files("/data1/gdouglas/projects/accessory_vs_pseudogene/pseudogenes/processed/pseudo_filtered_ids/"))
 
-for (ACC_FILE in list.files(path = "/data1/gdouglas/projects/accessory_vs_pseudogene/genome_accessions/", full.names = FALSE)) {
+genome_accession_path <- '/data1/gdouglas/projects/accessory_vs_pseudogene/focal_genome_downloads/downloaded_genome_accessions/'
+
+for (ACC_FILE in list.files(path = genome_accession_path, full.names = FALSE)) {
   
   sp <- gsub("_accessions.txt", "", ACC_FILE)
   
-  sp_genomes <- read.table(paste("/data1/gdouglas/projects/accessory_vs_pseudogene/genome_accessions/", ACC_FILE, sep = ""),
+  sp_genomes <- read.table(paste(genome_accession_path, ACC_FILE, sep = ""),
                            stringsAsFactors = FALSE)$V1
   
   num_filt_genomes <- length(which(sp_genomes %in% pseudo_filt_genomes))

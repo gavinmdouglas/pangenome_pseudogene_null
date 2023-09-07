@@ -19,7 +19,6 @@ clusters_both <- intersect(cluster_breakdown_intact$cluster, cluster_breakdown_p
 cluster_breakdown_intact <- cluster_breakdown_intact[which(! cluster_breakdown_intact$cluster %in% clusters_both), ]
 cluster_breakdown_pseudo <- cluster_breakdown_pseudo[which(! cluster_breakdown_pseudo$cluster %in% clusters_both), ]
 
-
 cluster_types <- list("intact" = unique(cluster_breakdown_intact$cluster),
                       "intergenic.pseudogene" = unique(cluster_breakdown_pseudo$cluster),
                       "both" = unique(clusters_both))

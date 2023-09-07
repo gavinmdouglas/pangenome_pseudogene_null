@@ -81,7 +81,7 @@ combined <- plot_grid(plotlist = all_plots,
                       nrow = 4,
                       rel_widths = c(1, 0.75))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/WORKING_metric_distributions_by_taxa_class.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_metric_distributions_by_taxa_class.pdf',
        plot = combined,
        device = 'pdf',
        dpi = 600,

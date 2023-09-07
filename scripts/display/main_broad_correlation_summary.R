@@ -26,8 +26,6 @@ run_pairwise_pangenome_cor <- function(metrics, in_df) {
       
       if (metrics[i] == 'dnds_by_ds') {
         
-        dnds_vals <- in_df[, 'dnds']
-        
         partial_spearman_out <- ppcor::pcor.test(x = in_df$dnds,
                                                  y = metric_j_vals,
                                                  z = in_df$ds,
