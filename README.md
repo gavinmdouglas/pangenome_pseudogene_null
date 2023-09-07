@@ -19,4 +19,6 @@ Code for manuscript: "Pseudogenes as a neutral reference for detecting selection
 
 	* `preprocessing` - R and Python scripts for preprocessing raw and intermediate files
 
+	* `sanity_checks` - Quick scripts for running checks of specific results reported in the manuscript (i.e., regenerating results with independent code).
+
 	* `text_results` - Small scripts for computing values reported in text (intended to be run on datafiles distributed on FigShare repository)
