@@ -74,9 +74,9 @@ combined <- plot_grid(dnds_vs_si_per3, dnds_vs_si_per20,
                       labels = c('a', 'b', 'c', 'd'),
                       nrow = 2, ncol = 2)
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig7.jpg',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig7.pdf',
        plot = combined,
-       device = 'jpeg',
+       device = 'pdf',
        dpi = 400,
        width = 10,
        height = 8)

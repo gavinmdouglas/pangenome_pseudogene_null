@@ -84,9 +84,9 @@ combined <- plot_grid(plotlist = all_plots,
                       nrow = 4,
                       rel_widths = c(1, 0.75))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig8.jpg',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig8.pdf',
        plot = combined,
-       device = 'jpeg',
+       device = 'pdf',
        dpi = 600,
        width = 9,
        height = 10)

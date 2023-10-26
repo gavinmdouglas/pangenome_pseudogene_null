@@ -43,9 +43,9 @@ mobilome_enrichment_by_subtype <- ggplot(data = mobilome_COG_hits, aes(x = Subty
                                         xlab("Associated mobile genetic element sub-type") +
                                         ylab(expression('log'[2]*'(Odd\'s ratio + 0.1)'))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig5.jpg',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig5.pdf',
        plot = mobilome_enrichment_by_subtype,
-       device = 'jpeg',
+       device = 'pdf',
        dpi = 300,
        width = 6,
        height = 6)

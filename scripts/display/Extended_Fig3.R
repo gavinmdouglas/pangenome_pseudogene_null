@@ -25,9 +25,9 @@ species_random_effects <- ggplot(data = random_effects_species, aes(x = Intercep
                                              color = "black") +
                                   theme(axis.text.y = element_text(face = "italic"))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig3.jpg',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig3.pdf',
        plot = species_random_effects,
-       device = 'jpeg',
+       device = 'pdf',
        dpi = 400,
        width = 8,
        height = 6)

@@ -92,8 +92,8 @@ norm_AIC_barplot <- ggplot(data = glmm_fit.info, aes(x = min_by_AIC_norm, y = fo
                            theme_bw()
 
 ggsave(plot = norm_AIC_barplot,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig2.jpg",
-       device = "jpeg", width = 13, height = 10, units = "in", dpi = 400)
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig2.pdf",
+       device = "pdf", width = 13, height = 10, units = "in", dpi = 400)
 
 
 ## Summarize variance explained by each random effect.
