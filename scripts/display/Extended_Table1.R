@@ -8,7 +8,7 @@ rm(list = ls(all.names = TRUE))
 ###  - Number of pseudogene clusters
 ###  - Mean number of intact clusters per genome
 ###  - Mean number of pseudogene clusters per genome
-### (Get standard deviations for all mean computations too - just in case they are useful to report!)
+###  (Get standard deviations for all mean computations too - just in case they are useful to report!)
 
 # Initialize table.
 species <- read.table("/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/indepth_10_species_analysis/focal_species.txt",
@@ -85,3 +85,5 @@ write.table(x  = summary_means,
             row.names = TRUE,
             col.names = NA,
             sep = "\t")
+
+# Note: this table was then formatted in Word and saved manually as a PDF and then converted to JPEG.

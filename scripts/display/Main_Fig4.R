@@ -97,7 +97,7 @@ combined <- plot_grid(dnds_vs_mean_num_genes,
                       dnds_vs_sisp,
                       labels = c('a', 'b', 'c', 'd'))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_pangenome_diversity_vs_dnds.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig4.pdf',
        plot = combined,
        device = 'pdf',
        dpi = 600,
@@ -105,3 +105,8 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        height = 8)
 
 options(scipen = 0)
+
+# Get exact P-values to report in figure legend:
+cor.test(pangenome$dnds, pangenome$genomic_fluidity, method = 'spearman')
+cor.test(pangenome$dnds, pangenome$mean_percent_singletons_per9, method = 'spearman')
+cor.test(pangenome$dnds, pangenome$si_sp, method = 'spearman')

@@ -97,9 +97,9 @@ cog.category.annot_percent_by_type_heatmap <- plot_grid(grid.grabExpr(draw(cog.c
                                                                            column_title = 'Percent of clusters (restricted to only those with COG category annotations) per pangenome partition')))
 
 ggsave(plot = all.cluster_and_unannot_heatmaps,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_all.cluster_and_unannot_heatmaps.pdf",
-       device = "pdf", width = 12, height = 12, units = "in", dpi = 400)
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig1.jpg",
+       device = "jpeg", width = 12, height = 12, units = "in", dpi = 400)
 
 ggsave(plot = cog.category.annot_percent_by_type_heatmap,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_indepth_cog.category.annot_percent_by_type_heatmap.pdf",
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig1.pdf",
        device = "pdf", width = 12, height = 6, units = "in", dpi = 400)

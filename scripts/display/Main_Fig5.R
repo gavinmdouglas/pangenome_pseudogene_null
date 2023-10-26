@@ -150,7 +150,7 @@ no.outlier_data_heatmap <- Heatmap(matrix = as.matrix(no.outlier_data_cor$spearm
 combined <- plot_grid(grid.grabExpr(draw(all_data_heatmap + no.outlier_data_heatmap,
                                          ht_gap = unit(20, "mm"))))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/WORKING_all_pairwise_cor.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig5.pdf',
        plot = combined,
        device = 'pdf',
        dpi = 600,

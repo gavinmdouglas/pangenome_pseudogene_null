@@ -57,5 +57,5 @@ heatmap_linear_coef_raw <- Heatmap(matrix = as.matrix(pvalues_discrete),
 heatmap_linear_coef <- cowplot::plot_grid(grid.grabExpr(draw(heatmap_linear_coef_raw)))
 
 ggsave(plot = heatmap_linear_coef,
-       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_linear_model_coef.pdf",
-       device = "pdf", width = 6, height = 5, units = "in", dpi = 600)
+       filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig9.jpg",
+       device = "jpeg", width = 6, height = 5, units = "in", dpi = 600)

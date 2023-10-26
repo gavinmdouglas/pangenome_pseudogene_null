@@ -72,7 +72,7 @@ combined_plot <- cowplot::plot_grid(dnds_vs_mean_percent_coverage_pseudogenes,
                                     labels = c('a', 'b'),
                                     nrow = 2)
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_figure_broad_ds_and_dnds_vs_pseudocov.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig6.pdf',
        plot = combined_plot,
        device = 'pdf',
        dpi = 400,

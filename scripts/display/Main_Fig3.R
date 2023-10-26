@@ -152,9 +152,16 @@ combined <- plot_grid(si_vs_sp,
                      labels = c('a', 'b', 'c', 'd'),
                      nrow = 2)
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_broad_motivation.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig3.pdf',
        plot = combined,
        device = 'pdf',
        dpi = 600,
        width = 11,
        height = 9)
+
+
+# Get exact P-values to report in figure legend:
+cor.test(pangenome$dnds, pangenome$ds, method = 'spearman')
+cor.test(pangenome$mean_percent_singletons_per9, pangenome$ds, method = 'spearman')
+cor.test(pangenome$mean_percent_singletons_pseudo_per9, pangenome$ds, method = 'spearman')
+

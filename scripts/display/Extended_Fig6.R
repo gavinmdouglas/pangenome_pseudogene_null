@@ -61,9 +61,9 @@ combined_plot <- plot_grid(num_any_v_num_single,
                            Mycoplasmopsis_bovis_genefreq_dist,
                            labels = c('a', 'b', 'c', 'd'))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_figure_pangenome_metrics_compare.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig6.jpg',
        plot = combined_plot,
-       device = 'pdf',
+       device = 'jpeg',
        dpi = 400,
        width = 10,
        height = 8)

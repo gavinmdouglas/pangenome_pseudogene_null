@@ -106,9 +106,9 @@ coef_barplot <- ggplot(data = glmm_final_summaries_only.sig, aes(x = Estimate, y
                                           xmax = Estimate + Std..Error),
                                       width = 0.2, color = "black")
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_glmm_other.cloud_and_shell_coef.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig4.jpg',
        plot = coef_barplot,
-       device = 'pdf',
+       device = 'jpeg',
        dpi = 400,
        width = 10,
        height = 10)

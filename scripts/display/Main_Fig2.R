@@ -91,7 +91,7 @@ ultra.cloud_coef_barplot <- ggplot(data = glmm_final_summaries_only.sig, aes(x =
                                                       xmax = Estimate + Std..Error),
                                                       width = 0.2, color = "black")
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/main_indepth_glmm_ultra.cloud_coef.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig2.pdf',
        plot = ultra.cloud_coef_barplot,
        device = 'pdf',
        dpi = 600,

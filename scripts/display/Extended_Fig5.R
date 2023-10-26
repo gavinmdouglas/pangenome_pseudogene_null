@@ -29,9 +29,12 @@ mobilome_COG_hits[plasmid_hits[which(! plasmid_hits %in% c(transposon_hits, phag
 
 mobilome_COG_hits$log2OR <- log2(mobilome_COG_hits$OR + 0.1)
 
-# Values to report in text:
+# Transposon summary statistics to report in text:
 mean(mobilome_COG_hits[which(mobilome_COG_hits$Subtype == 'Transposon'), 'OR'])
 sd(mobilome_COG_hits[which(mobilome_COG_hits$Subtype == 'Transposon'), 'OR'])
+
+# Sample sizes for figure legend:
+table(mobilome_COG_hits$Subtype)
 
 mobilome_enrichment_by_subtype <- ggplot(data = mobilome_COG_hits, aes(x = Subtype, y = log2OR)) +
                                         geom_boxplot(outlier.shape = NA) +
@@ -40,9 +43,9 @@ mobilome_enrichment_by_subtype <- ggplot(data = mobilome_COG_hits, aes(x = Subty
                                         xlab("Associated mobile genetic element sub-type") +
                                         ylab(expression('log'[2]*'(Odd\'s ratio + 0.1)'))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_indepth_mobilome_enrichment.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig5.jpg',
        plot = mobilome_enrichment_by_subtype,
-       device = 'pdf',
+       device = 'jpeg',
        dpi = 300,
        width = 6,
        height = 6)

@@ -18,6 +18,9 @@ pangenome$class_clean <- gsub('c__', '', pangenome$class_clean)
 pangenome$class_clean <- factor(pangenome$class_clean,
                                 levels = rev(sort(unique(pangenome$class_clean))))
 
+# Tally of class sample sizes, to report in legend:
+rev(table(pangenome$class_clean))
+
 metrics_to_plot <- c('ds', 'dnds',
                      'mean_num_genes', 'mean_num_pseudo',
                      'genomic_fluidity',
@@ -81,9 +84,9 @@ combined <- plot_grid(plotlist = all_plots,
                       nrow = 4,
                       rel_widths = c(1, 0.75))
 
-ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_metric_distributions_by_taxa_class.pdf',
+ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig8.jpg',
        plot = combined,
-       device = 'pdf',
+       device = 'jpeg',
        dpi = 600,
        width = 9,
        height = 10)
