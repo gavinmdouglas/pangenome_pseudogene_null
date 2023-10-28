@@ -103,3 +103,31 @@ ggsave(plot = all.cluster_and_unannot_heatmaps,
 ggsave(plot = cog.category.annot_percent_by_type_heatmap,
        filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_Fig1.pdf",
        device = "pdf", width = 12, height = 6, units = "in", dpi = 400)
+
+# Prep source files:
+char_fill_tab_to_integer <- function(tab) {
+  int_tab <- tab
+  orig_rows <- rownames(tab)
+  int_tab <- gsub('^.*\\(', '', int_tab)
+  int_tab <- gsub('\\)$', '', int_tab)
+  int_tab <- data.frame(apply(int_tab, 2, as.integer))
+  orig_cols <- colnames(int_tab)
+  int_tab$species <- orig_rows
+  return(int_tab[, c('species', orig_cols)])
+}
+
+all_count <- char_fill_tab_to_integer(all.clusters_percent_by_type_fill)
+unannot_count <- char_fill_tab_to_integer(unannot_percent_by_type.cell_fill)
+annot_count <- char_fill_tab_to_integer(cog.category.annot_percent_by_type_fill)
+
+write.table(x = all_count,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig1_upper.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)
+
+write.table(x = unannot_count,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig1_lower.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)
+
+write.table(x = annot_count,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/Fig1.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

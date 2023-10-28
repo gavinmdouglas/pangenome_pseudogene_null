@@ -80,3 +80,14 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 400,
        width = 10,
        height = 8)
+
+# Write out source data:
+source_out <- pangenome[, c('dnds',
+                            'mean_percent_singletons_per3', 'mean_percent_singletons_pseudo_per3', 'si_sp_per3',
+                            'mean_percent_singletons_per20', 'mean_percent_singletons_pseudo_per20', 'si_sp_per20')]
+orig_col <- colnames(source_out)
+source_out$species <- rownames(source_out)
+source_out <- source_out[, c('species', orig_col)]
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig7.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

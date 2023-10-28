@@ -156,3 +156,33 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 600,
        width = 12,
        height = 6)
+
+# Write out source data:
+source_out_RAW <- list()
+
+index <- 1
+for (col_id in colnames(full_data_cor$spearman_rho)) {
+ for (row_id in rownames(full_data_cor$spearman_rho)) {
+  full_rho <- full_data_cor$spearman_rho[row_id, col_id]
+  if (is.na(full_rho)) { next }
+  full_p <- full_data_cor$spearman_p[row_id, col_id]
+  
+  no.outlier_rho <- no.outlier_data_cor$spearman_rho[row_id, col_id]
+  no.outlier_p <- no.outlier_data_cor$spearman_p[row_id, col_id]
+  
+  source_out_RAW[[index]] <- data.frame(variable1 = col_id,
+                                        variable2 = row_id,
+                                        all.data_spearman_rho = full_rho,
+                                        all.data_spearman_p = full_p,
+                                        no.outlier_spearman_rho = no.outlier_rho,
+                                        no.outlier_spearman_p = no.outlier_p)
+  
+  index <- index + 1
+ }
+}
+
+source_out <- do.call(rbind, source_out_RAW)
+
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/Fig5.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

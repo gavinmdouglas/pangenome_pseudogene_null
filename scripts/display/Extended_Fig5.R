@@ -49,3 +49,15 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 300,
        width = 6,
        height = 6)
+
+
+# Write out source data:
+source_out <- mobilome_COG_hits[, c('sp', 'partition', 'category', 'Description', 'Subtype',
+                                    'OR', 'log2OR', 'p', 'fdr')]
+
+colnames(source_out) <- c('species', 'partition', 'COG_gene_family', 'description', 'mobilome_subtype',
+                          'odds_ratio', 'log2_odds_ratio', 'p_value', 'fdr_corrected_p_value')
+
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig5.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

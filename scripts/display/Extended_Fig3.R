@@ -31,3 +31,11 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 400,
        width = 8,
        height = 6)
+
+# Write out key source data:
+random_effects_species <- random_effects_species[, c('partition', 'species', 'Intercept')]
+colnames(random_effects_species) <- c('partition', 'species', 'intercept')
+
+write.table(x = random_effects_species,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig3.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

@@ -9,7 +9,6 @@ overall_p <- function(model_obj) {
   return(p)
 }
 
-
 out_models <- readRDS(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/pangenome_linear_models.rds')
 
 response_variables <- c('mean_num_genes', 'genomic_fluidity', 'mean_percent_singletons_per9', 'si_sp')
@@ -33,7 +32,7 @@ model_summaries$Variable <- gsub('\\(Intercept\\)', 'Intercept', model_summaries
 for (response in response_variables) {
   response_summary <- summary(out_models[[response]])
   model_summaries[, paste(response, 'estimate', sep = '_')] <- format(round(response_summary$coefficients[rownames(model_summaries), 'Estimate'], digits=3), nsmall = 3)
-  model_summaries[, paste(response, 'P', sep = '_')] <- format(round(response_summary$coefficients[rownames(model_summaries), 'Pr(>|t|)'], digits=3), nsmall = 3)
+  model_summaries[, paste(response, 'P', sep = '_')] <- response_summary$coefficients[rownames(model_summaries), 'Pr(>|t|)']
 }
 
 # Re-order dataframe rows (and indicate number of species in each class):
@@ -58,7 +57,7 @@ model_summaries_reordered <- do.call(rbind, list(Intercept_row, Class_rows, ds_r
 model_summaries_reordered['rsquared', 'Variable'] <- 'Adjusted R-squared'
 model_summaries_reordered['rsquared', 'Count'] <- NA
 model_summaries_reordered['rsquared', paste(response_variables, 'estimate', sep = '_')] <- sapply(response_variables, function(x) { format(round(summary(out_models[[x]])$adj.r.squared, digits=3), nsmall = 3) })
-model_summaries_reordered['rsquared', paste(response_variables, 'P', sep = '_')] <- sapply(response_variables, function(x) { format(round(overall_p(out_models[[x]]), digits=3), nsmall = 3) })
+model_summaries_reordered['rsquared', paste(response_variables, 'P', sep = '_')] <- sapply(response_variables, function(x) { overall_p(out_models[[x]]) })
 
 write.table(x = model_summaries_reordered,
             file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/linear_model_coef.tsv',

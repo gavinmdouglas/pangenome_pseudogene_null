@@ -122,3 +122,10 @@ ggsave(plot = norm_AIC_barplot,
 #   ylab("Random effect") +
 #   theme_bw()
 # 
+
+# Write out key source data:
+glmm_fit.info <- glmm_fit.info[, c('partition', 'model', 'AIC', 'min_by_AIC_norm')]
+
+write.table(x = glmm_fit.info,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig2.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

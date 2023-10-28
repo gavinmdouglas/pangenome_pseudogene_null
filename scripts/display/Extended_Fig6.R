@@ -67,3 +67,19 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 400,
        width = 10,
        height = 8)
+
+# Write out source data:
+source_out_a_b_c <- pangenome[, c('mean_num_genes', 'mean_num_singletons_per9', 'mean_percent_singletons_per9', 'genomic_fluidity')]
+source_out_a_b_c$species <- rownames(source_out_a_b_c)
+source_out_a_b_c <- source_out_a_b_c[, c('species', 'mean_num_genes', 'mean_num_singletons_per9', 'mean_percent_singletons_per9', 'genomic_fluidity')]
+write.table(x = source_out_a_b_c,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig6_abc.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)
+
+
+source_out_d <- data.frame(mycoplasmopsis_bovis_gene = Mycoplasmopsis_bovis_panaroo$Gene,
+                           mycoplasmopsis_bovis_gene_annotation = Mycoplasmopsis_bovis_panaroo$Annotation,
+                           num_isolates_w_gene = num_isolates_per_gene$count)
+write.table(x = source_out_d,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig6_d.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

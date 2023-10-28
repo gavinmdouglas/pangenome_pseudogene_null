@@ -80,7 +80,7 @@ for (sp in species) {
 }
 
 write.table(x  = summary_means,
-            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/extended_table_indepth_per_species_breakdown.tsv",
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Table1.tsv",
             quote = FALSE,
             row.names = TRUE,
             col.names = NA,

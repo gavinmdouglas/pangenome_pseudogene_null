@@ -21,10 +21,13 @@ pangenome$class_clean <- factor(pangenome$class_clean,
 # Tally of class sample sizes, to report in legend:
 rev(table(pangenome$class_clean))
 
-metrics_to_plot <- c('ds', 'dnds',
-                     'mean_num_genes', 'mean_num_pseudo',
+metrics_to_plot <- c('ds',
+                     'dnds',
+                     'mean_num_genes',
+                     'mean_num_pseudo',
                      'genomic_fluidity',
-                     'mean_percent_singletons_per9', 'mean_percent_singletons_pseudo_per9',
+                     'mean_percent_singletons_per9',
+                     'mean_percent_singletons_pseudo_per9',
                      'si_sp')
 
 clean_labels <- list('ds' = 'dS',
@@ -90,3 +93,14 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 600,
        width = 9,
        height = 10)
+
+# Write out source data:
+source_out <- pangenome[, c('class_clean', metrics_to_plot)]
+orig_col <- colnames(source_out)
+source_out$species <- rownames(source_out)
+source_out <- source_out[, c('species', orig_col)]
+colnames(source_out)[which(colnames(source_out) == 'class_clean')] <- 'taxonomic_class'
+
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig8.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

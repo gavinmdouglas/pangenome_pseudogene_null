@@ -112,3 +112,13 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 400,
        width = 10,
        height = 10)
+
+
+# Write out source data:
+source_out <- glmm_final_summaries_only.sig[, c('partition', 'variable', 'Type', 'Estimate', 'Std..Error', 'Pr...z..')]
+colnames(source_out) <- c('partition', 'variable', 'type', 'coefficient', 'standard_error', 'P_value')
+source_out$type <- as.character(source_out$type)
+source_out$type <- gsub('\n', ' ', source_out$type)
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig4.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

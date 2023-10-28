@@ -165,3 +165,12 @@ cor.test(pangenome$dnds, pangenome$ds, method = 'spearman')
 cor.test(pangenome$mean_percent_singletons_per9, pangenome$ds, method = 'spearman')
 cor.test(pangenome$mean_percent_singletons_pseudo_per9, pangenome$ds, method = 'spearman')
 
+
+# Write out source data:
+source_out <- pangenome[, c('dnds', 'ds', 'mean_percent_singletons_per9', 'mean_percent_singletons_pseudo_per9', 'si_sp')]
+orig_col <- colnames(source_out)
+source_out$species <- rownames(source_out)
+source_out <- source_out[, c('species', orig_col)]
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/Fig3.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)

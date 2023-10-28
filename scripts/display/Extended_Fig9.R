@@ -1,6 +1,7 @@
 rm(list = ls(all.names = TRUE))
 
 library(ComplexHeatmap)
+library(ggplot2)
 
 model_summaries <- read.table(file = '/data1/gdouglas/projects/pangenome_pseudogene_null_zenodo/broad_pangenome_analysis/model_output/linear_model_coef.tsv.gz',
                               sep = '\t', stringsAsFactors = FALSE, header = TRUE)
@@ -59,3 +60,15 @@ heatmap_linear_coef <- cowplot::plot_grid(grid.grabExpr(draw(heatmap_linear_coef
 ggsave(plot = heatmap_linear_coef,
        filename = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_items/Douglas_ED_Fig9.pdf",
        device = "pdf", width = 6, height = 5, units = "in", dpi = 600)
+
+
+# Write out source data:
+source_out <- data.frame(coefficient = model_summaries$Variable,
+                         num_genomes_per_class = class_count)
+source_out <- cbind(source_out, estimates)
+source_out <- cbind(source_out, pvalues)
+
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/ED_Fig9.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)
+

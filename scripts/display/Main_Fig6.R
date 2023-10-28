@@ -78,3 +78,12 @@ ggsave(filename = '/home/gdouglas/scripts/pangenome_pseudogene_null/display_item
        dpi = 400,
        width = 8,
        height = 10)
+
+# Write out source data.
+source_out <- pangenome[, c('dnds', 'ds', 'si_sp', 'mean_percent_coverage_pseudogenes')]
+orig_col <- colnames(source_out)
+source_out$species <- rownames(source_out)
+source_out <- source_out[, c('species', orig_col)]
+write.table(x = source_out,
+            file = "/home/gdouglas/scripts/pangenome_pseudogene_null/display_source_data/Fig6.tsv",
+            col.names = TRUE, row.names = FALSE, sep = '\t', quote = FALSE)
