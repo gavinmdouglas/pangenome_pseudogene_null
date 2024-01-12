@@ -9,7 +9,7 @@ Please feel free to [open an issue](https://github.com/gavinmdouglas/pangenome_p
 
 #### Repository structure:
 
-* `display_source_data` - Source data for each display item, included for convenience.
+* `display_source_data` - Source data for each display item, included for convenience. Please note that this is only the final processed data used for plotting. Larger processed datafiles are found at [this Zenodo repository](https://zenodo.org/records/8326664).
 
 * `scripts`
 
