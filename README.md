@@ -25,5 +25,5 @@ Please feel free to [open an issue](https://github.com/gavinmdouglas/pangenome_p
 
 	* `sanity_checks` - Quick scripts for running checks of specific results reported in the manuscript (i.e., regenerating results with independent code).
 
-	* `text_results` - Small scripts for computing values reported in text (intended to be run on datafiles distributed on FigShare repository).
+	* `text_results` - Small scripts for computing values reported in text (intended to be run on datafiles distributed on Zenodo repository).
 
